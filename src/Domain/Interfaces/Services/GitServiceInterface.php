@@ -14,6 +14,8 @@ interface GitServiceInterface
 
     public function pullPackage(PackageEntity $packageEntity);
 
+    public function branch(PackageEntity $packageEntity, string $branch = 'master');
+
     public function pushPackage(PackageEntity $packageEntity);
 
     public function isNeedRelease(PackageEntity $packageEntity): bool;

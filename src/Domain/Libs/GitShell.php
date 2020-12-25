@@ -255,7 +255,7 @@ class GitShell extends BaseShell
     {
         return $this
             ->begin()
-            ->run('git checkout', $name)
+            ->run('git checkout ' . $name)
             ->end();
     }
 
