@@ -18,8 +18,8 @@ use ZnLib\Console\Symfony4\Helpers\CommandHelper;
 
 // --- Generator ---
 
-$container->bind(\ZnTool\Dev\Generator\Domain\Interfaces\Services\DomainServiceInterface::class, \ZnTool\Dev\Generator\Domain\Services\DomainService::class);
-$container->bind(\ZnTool\Dev\Generator\Domain\Interfaces\Services\ModuleServiceInterface::class, \ZnTool\Dev\Generator\Domain\Services\ModuleService::class);
+$container->bind(\ZnTool\Generator\Domain\Interfaces\Services\DomainServiceInterface::class, \ZnTool\Generator\Domain\Services\DomainService::class);
+$container->bind(\ZnTool\Generator\Domain\Interfaces\Services\ModuleServiceInterface::class, \ZnTool\Generator\Domain\Services\ModuleService::class);
 
 // --- Composer ---
 
@@ -40,7 +40,7 @@ $container->bind(\ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositor
 $container->bind(\ZnTool\Package\Domain\Interfaces\Repositories\GitRepositoryInterface::class, \ZnTool\Package\Domain\Repositories\File\GitRepository::class);
 
 CommandHelper::registerFromNamespaceList([
-    'ZnTool\Dev\Generator\Commands',
+    'ZnTool\Generator\Commands',
     'ZnTool\Package\Commands',
     'ZnTool\Dev\Composer\Commands',
 ], $container);
