@@ -191,7 +191,7 @@ class InfoRepository extends BaseRepository implements ReadInterface
         foreach ($collection as $package) {
             try {
                 $package = FileHelper::getAlias('@' . $package);
-                $package = str_replace(VENDOR_DIR . DIRECTORY_SEPARATOR, '', $package);
+                $package = str_replace(__DIR__ . '/../../../../../..' . DIRECTORY_SEPARATOR, '', $package);
                 $packageArr = explode('\\', $package);
                 $package = $packageArr[0] . '\\' . $packageArr[1];
                 $package = str_replace('\\', '/', $package);
