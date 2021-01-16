@@ -10,7 +10,7 @@ use ZnLib\Db\Capsule\Manager;
 require __DIR__ . '/../../../autoload.php';
 DotEnv::init();
 
-$kernel = new Kernel();
+$kernel = new \ZnCore\Base\Libs\App\Kernel();
 
 $container = Container::getInstance();
 $container->bind(Application::class, Application::class, true);
