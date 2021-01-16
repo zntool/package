@@ -10,21 +10,8 @@ use ZnLib\Console\Symfony4\Helpers\CommandHelper;
  * @var Container $container
  */
 
-//$container = Container::getInstance();
 
-// --- Application ---
-
-//$container->bind(Application::class, Application::class, true);
-
-// --- Generator ---
-
-//$container->bind(\ZnTool\Generator\Domain\Interfaces\Services\DomainServiceInterface::class, \ZnTool\Generator\Domain\Services\DomainService::class);
-//$container->bind(\ZnTool\Generator\Domain\Interfaces\Services\ModuleServiceInterface::class, \ZnTool\Generator\Domain\Services\ModuleService::class);
-
-// --- Composer ---
-
-
-$container->bind(\ZnTool\Dev\Composer\Domain\Interfaces\Repositories\ConfigRepositoryInterface::class, \ZnTool\Dev\Composer\Domain\Repositories\File\ConfigRepository::class);
+/*$container->bind(\ZnTool\Dev\Composer\Domain\Interfaces\Repositories\ConfigRepositoryInterface::class, \ZnTool\Dev\Composer\Domain\Repositories\File\ConfigRepository::class);
 $container->bind(\ZnTool\Dev\Composer\Domain\Interfaces\Services\ConfigServiceInterface::class, \ZnTool\Dev\Composer\Domain\Services\ConfigService::class);
 
 // --- Package ---
@@ -37,10 +24,8 @@ $container->bind(\ZnTool\Package\Domain\Repositories\File\GroupRepository::class
     return $repo;
 });
 $container->bind(\ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositoryInterface::class, \ZnTool\Package\Domain\Repositories\File\PackageRepository::class);
-$container->bind(\ZnTool\Package\Domain\Interfaces\Repositories\GitRepositoryInterface::class, \ZnTool\Package\Domain\Repositories\File\GitRepository::class);
+$container->bind(\ZnTool\Package\Domain\Interfaces\Repositories\GitRepositoryInterface::class, \ZnTool\Package\Domain\Repositories\File\GitRepository::class);*/
 
 CommandHelper::registerFromNamespaceList([
-//    'ZnTool\Generator\Commands',
     'ZnTool\Package\Commands',
-//    'ZnTool\Dev\Composer\Commands',
 ], $container);
