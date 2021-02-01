@@ -2,12 +2,13 @@
 
 namespace ZnTool\Package\Domain\Entities;
 
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 use ZnCore\Domain\Interfaces\Entity\EntityIdInterface;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use Symfony\Component\Validator\Constraints as Assert;
-use ZnCore\Domain\Interfaces\Entity\ValidateEntityInterface;
+use ZnCore\Domain\Interfaces\Entity\ValidateEntityByMetadataInterface;
 
-class ConfigEntity implements ValidateEntityInterface, EntityIdInterface
+class ConfigEntity implements ValidateEntityByMetadataInterface, EntityIdInterface
 {
 
     private $id = null;
@@ -35,37 +36,17 @@ class ConfigEntity implements ValidateEntityInterface, EntityIdInterface
 
     private $autoloadDev = null;
 
-    public function validationRules()
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        return [
-            'name' => [
-                new Assert\NotBlank,
-            ],
-            'type' => [
-                new Assert\NotBlank,
-            ],
-            'authors' => [
-                new Assert\NotBlank,
-            ],
-            'license' => [
-                new Assert\NotBlank,
-            ],
-            'minimumStability' => [
-                new Assert\NotBlank,
-            ],
-            'require' => [
-                new Assert\NotBlank,
-            ],
-            'requireDev' => [
-                new Assert\NotBlank,
-            ],
-            'autoload' => [
-                new Assert\NotBlank,
-            ],
-            'autoloadDev' => [
-                new Assert\NotBlank,
-            ],
-        ];
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('type', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('authors', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('license', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('minimumStability', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('require', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('requireDev', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('autoload', new Assert\NotBlank);
+        $metadata->addPropertyConstraint('autoloadDev', new Assert\NotBlank);
     }
 
     public function getId()
