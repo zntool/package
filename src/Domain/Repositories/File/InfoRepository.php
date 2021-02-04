@@ -3,33 +3,18 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use Illuminate\Support\Collection;
-use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
-use php7extension\yii\web\NotFoundHttpException;
-use php7rails\domain\interfaces\repositories\ReadInterface;
-use php7rails\domain\repositories\BaseRepository;
-use php7tool\vendor\domain\entities\RepoEntity;
-use php7tool\vendor\domain\entities\RequiredEntity;
-use php7tool\vendor\domain\filters\IsIgnoreFilter;
-use php7tool\vendor\domain\filters\IsPackageFilter;
-use php7tool\vendor\domain\helpers\RepositoryHelper;
-use php7tool\vendor\domain\helpers\UseHelper;
-use ZnCore\Domain\Libs\Query;
-use ZnCore\Domain\Helpers\EntityHelper;
 use ZnCore\Base\Exceptions\InvalidArgumentException;
+use ZnCore\Base\Exceptions\NotFoundException;
+use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
 use ZnCore\Base\Libs\ArrayTools\Helpers\ArrayIterator;
 use ZnCore\Base\Libs\Scenario\Collections\ScenarioCollection;
+use ZnCore\Domain\Helpers\EntityHelper;
+use ZnCore\Domain\Libs\Query;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositoryInterface;
 use ZnTool\Package\Domain\Libs\GitShell;
 use ZnTool\Package\Domain\Services\GroupService;
 
-/**
- * Class InfoRepository
- *
- * @package php7tool\vendor\domain\repositories\file
- *
- * @property-read \php7tool\vendor\domain\Domain $domain
- */
 class InfoRepository extends BaseRepository implements ReadInterface
 {
 
@@ -48,7 +33,7 @@ class InfoRepository extends BaseRepository implements ReadInterface
         try {
             $this->oneById($id);
             return true;
-        } catch (NotFoundHttpException $e) {
+        } catch (NotFoundException $e) {
             return false;
         }
     }
@@ -65,7 +50,7 @@ class InfoRepository extends BaseRepository implements ReadInterface
         try {
             $this->one($query);
             return true;
-        } catch (NotFoundHttpException $e) {
+        } catch (NotFoundException $e) {
             return false;
         }
     }
@@ -82,7 +67,7 @@ class InfoRepository extends BaseRepository implements ReadInterface
         $query = Query::forge($query);
         $collection = $this->all($query);
         if (empty($collection)) {
-            throw new NotFoundHttpException(__METHOD__ . ': ' . __LINE__);
+            throw new NotFoundException(__METHOD__ . ': ' . __LINE__);
         }
         return $collection[0];
     }
@@ -203,11 +188,6 @@ class InfoRepository extends BaseRepository implements ReadInterface
         return $packages;
     }
 
-    /**
-     * @param $collection
-     *
-     * @return \php7rails\domain\values\BaseValue
-     */
     private function separateCollection($collection)
     {
         $filters = [
