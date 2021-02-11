@@ -11,7 +11,7 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
 
     public function __construct(PackageRepositoryInterface $repository)
     {
-        $this->repository = $repository;
+        $this->setRepository($repository);
     }
 
 }

@@ -20,7 +20,7 @@ class GitService extends BaseService implements GitServiceInterface
 
     public function __construct(GitRepositoryInterface $repository, PackageServiceInterface $packageService)
     {
-        $this->repository = $repository;
+        $this->setRepository($repository);
         $this->packageService = $packageService;
     }
 
@@ -39,7 +39,7 @@ class GitService extends BaseService implements GitServiceInterface
 
     public function lastVersion(PackageEntity $packageEntity)
     {
-        $tags = $this->repository->allVersion($packageEntity);
+        $tags = $this->getRepository()->allVersion($packageEntity);
         if ($tags) {
             return $tags[0];
         }
@@ -48,8 +48,8 @@ class GitService extends BaseService implements GitServiceInterface
 
     public function isNeedRelease(PackageEntity $packageEntity): bool
     {
-        $commitCollection = $this->repository->allCommit($packageEntity);
-        $tagCollection = $this->repository->allTag($packageEntity);
+        $commitCollection = $this->getRepository()->allCommit($packageEntity);
+        $tagCollection = $this->getRepository()->allTag($packageEntity);
 
         if ($commitCollection->count() == 0) {
             return true;
@@ -110,7 +110,7 @@ class GitService extends BaseService implements GitServiceInterface
 
     public function isHasChanges(PackageEntity $packageEntity): bool
     {
-        $isHas = $this->repository->isHasChanges($packageEntity);
+        $isHas = $this->getRepository()->isHasChanges($packageEntity);
 //        dd($packageEntity->getId());
         if($packageEntity->getName() == 'messenger') {
             //dd($isHas);
@@ -121,7 +121,7 @@ class GitService extends BaseService implements GitServiceInterface
 
     public function allChanged()
     {
-        return $this->repository->allChanged();
+        return $this->getRepository()->allChanged();
     }
 
 }

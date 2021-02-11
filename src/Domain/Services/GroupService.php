@@ -10,7 +10,7 @@ class GroupService extends BaseCrudService
 
     public function __construct(GroupRepository $repository)
     {
-        $this->repository = $repository;
+        $this->setRepository($repository);
     }
 
 }
