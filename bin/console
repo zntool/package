@@ -2,7 +2,6 @@
 <?php
 
 use Symfony\Component\Console\Application;
-use ZnCore\Base\Helpers\ComposerHelper;
 use ZnLib\Console\Symfony4\Helpers\CommandHelper;
 
 
@@ -10,5 +9,7 @@ require __DIR__ . '/../../../autoload.php';
 require __DIR__ . '/../src/Commands/config/consoleBootstrap.php';
 
 $application = new Application();
-CommandHelper::registerFromNamespaceList($config['consoleCommands'], $container, $application);
+CommandHelper::registerFromNamespaceList([
+    'ZnTool\Package\Commands',
+], $container, $application);
 $application->run();
