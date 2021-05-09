@@ -1,20 +1,13 @@
 <?php
 
-use Illuminate\Container\Container;
-use ZnCore\Base\Libs\App\Loaders\BundleLoader;
-use ZnLib\Db\Capsule\Manager;
-use ZnCore\Domain\Interfaces\Libs\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
-use ZnCore\Domain\Libs\EntityManager;
-use ZnCore\Base\Libs\DotEnv\DotEnv;
-use ZnLib\Db\Factories\ManagerFactory;
 use ZnCore\Base\Libs\App\Kernel;
+use ZnCore\Base\Libs\App\Loaders\BundleLoader;
+use ZnCore\Base\Libs\DotEnv\DotEnv;
 
 DotEnv::init();
 
 $kernel = new Kernel('console');
-$container = Container::getInstance();
-$kernel->setContainer($container);
+$container = $kernel->getContainer();
 
 /*$container->singleton(EntityManagerInterface::class, function (ContainerInterface $container) {
     return EntityManager::getInstance($container);
