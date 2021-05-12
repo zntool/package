@@ -17,7 +17,7 @@ class Bundle extends BaseBundle
     public function container(): array
     {
         return [
-            __DIR__ . '/../bin/container.php',
+            __DIR__ . '/Domain/config/container.php',
         ];
     }
 }
