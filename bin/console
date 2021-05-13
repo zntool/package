@@ -13,19 +13,3 @@ $bundles = [
 $kernel = KernelFactory::createConsoleKernel($bundles);
 $application = ApplicationFactory::createConsole($kernel);
 $application->run();
-
-
-
-
-//use Symfony\Component\Console\Application;
-//use ZnLib\Console\Symfony4\Helpers\CommandHelper;
-//
-//
-//require __DIR__ . '/../../../autoload.php';
-//require __DIR__ . '/../src/Commands/config/consoleBootstrap.php';
-//
-//$application = new Application();
-//CommandHelper::registerFromNamespaceList([
-//    'ZnTool\Package\Commands',
-//], $container, $application);
-//$application->run();
