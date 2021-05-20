@@ -86,6 +86,13 @@ class GitService extends BaseService implements GitServiceInterface
         return $result;
     }
 
+    public function branches(PackageEntity $packageEntity)
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+        $result = $git->getBranches();
+        return $result;
+    }
+
     public function pullPackage(PackageEntity $packageEntity)
     {
         $git = new GitShell($packageEntity->getDirectory());

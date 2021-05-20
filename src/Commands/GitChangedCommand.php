@@ -44,7 +44,8 @@ class GitChangedCommand extends BaseCommand
         $totalCollection = new Collection;
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();
-            $output->write(" $packageId ... ");
+            $branch = $this->gitService->branch($packageEntity);
+            $output->write(" $packageId:<fg=blue>$branch</> ... ");
             $isHasChanges = $this->gitService->isHasChanges($packageEntity);
             $isGit = is_file($packageEntity->getDirectory() . '/.git/config');
             $changedEntity = new ChangedEntity;
@@ -57,12 +58,20 @@ class GitChangedCommand extends BaseCommand
                 $output->writeln("<fg=yellow>Has changes</>");
                 $changedEntity->setStatus(StatusEnum::CHANGED);
                 $totalCollection->add($changedEntity);
+            } elseif (!$this->isBranch($branch)) {
+                $output->writeln("<fg=yellow>Select branch</>");
+                $changedEntity->setStatus(StatusEnum::SELECT_BRANCH);
+                $totalCollection->add($changedEntity);
             } else {
                 $output->writeln("<fg=green>OK</>");
                 //$changedEntity->setStatus(StatusEnum::OK);
             }
         }
         return $totalCollection;
+    }
+
+    private function isBranch(string $branchName): bool {
+        return preg_match('/^([a-z\d]+[-_]?)*[a-z\d]$/i', $branchName);
     }
 
     private function displayTotal(Collection $totalCollection, InputInterface $input, OutputInterface $output)
@@ -80,6 +89,16 @@ class GitChangedCommand extends BaseCommand
             $orgDir = realpath($vendorDir) . '/' . $packageEntity->getGroup()->name;
             if($changedEntity->getStatus() == StatusEnum::CHANGED) {
                 $fastCommands[] = "cd $dir && git add . && git commit -m upd && git push";
+                $output->writeln("<fg=yellow> {$packageId}</>");
+            } elseif ($changedEntity->getStatus() == StatusEnum::SELECT_BRANCH) {
+                $branches = $this->gitService->branches($changedEntity->getPackage());
+                $branchNames = [];
+                foreach ($changedEntity->getBranches() as $branchName) {
+                    if($this->isBranch($branchName)) {
+                        $branchNames[] = $branchName;
+                    }
+                }
+                $fastCommands[] = "cd $dir && git checkout {$branchNames[0]} && git pull";
                 $output->writeln("<fg=yellow> {$packageId}</>");
             } elseif ($changedEntity->getStatus() == StatusEnum::NOT_FOUND_REPO) {
                 $packageName = $packageEntity->getName();
