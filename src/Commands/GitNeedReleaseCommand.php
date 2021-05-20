@@ -6,6 +6,8 @@ use Illuminate\Support\Collection;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZnTool\Package\Domain\Enums\StatusEnum;
+use ZnTool\Package\Domain\Helpers\VersionHelper;
 
 class GitNeedReleaseCommand extends BaseCommand
 {
@@ -58,9 +60,34 @@ class GitNeedReleaseCommand extends BaseCommand
         /** @var PackageEntity[] | Collection $totalCollection */
         $output->writeln('<fg=yellow>Need release!</>');
         $output->writeln('');
+
+        $fastCommands = [];
         foreach ($totalCollection as $packageEntity) {
             $packageId = $packageEntity->getId();
-            $output->writeln("<fg=yellow> {$packageId}</>");
+            $lastVersion = $this->gitService->lastVersion($packageEntity);
+
+            $version = $lastVersion ? "<fg=blue>{$lastVersion}</>" : "<fg=red>No version</>";
+            $output->writeln("<fg=yellow> {$packageId}:{$version}</>");
+
+            $vendorDir = __DIR__ . '/../../../../';
+            $dir = realpath($vendorDir) . '/' . $packageId;
+
+            $possibleVersionList = VersionHelper::possibleVersionList($lastVersion);
+            $fastCommands[] = "<fg=yellow> {$packageId}:{$version}</>";
+            foreach ($possibleVersionList as $value) {
+                $fastCommands[] = "cd $dir && git tag 'v$value' && git push origin 'v$value'";
+            }
+            $fastCommands[] = "";
         }
+
+        $output->writeln('');
+        $output->writeln('<fg=yellow>Fast command:</>');
+        $output->writeln('');
+
+        foreach ($fastCommands as $fastCommand) {
+            $output->writeln($fastCommand);
+        }
+
+
     }
 }

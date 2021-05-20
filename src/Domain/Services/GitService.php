@@ -93,6 +93,15 @@ class GitService extends BaseService implements GitServiceInterface
         return $result;
     }
 
+    public function tags(PackageEntity $packageEntity)
+    {
+        $tagCollection = $this->getRepository()->allTag($packageEntity);
+        return $tagCollection;
+//        $git = new GitShell($packageEntity->getDirectory());
+//        $result = $git->getTags();
+//        return $result;
+    }
+
     public function pullPackage(PackageEntity $packageEntity)
     {
         $git = new GitShell($packageEntity->getDirectory());

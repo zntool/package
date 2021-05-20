@@ -60,11 +60,6 @@ class GitRepository implements GitRepositoryInterface
                 preg_match('/v?(\d+\.\d+\.\d+)/i', $tagEntity->getName(), $matches);
                 return $matches[1] ?? null;
             })->toArray();
-
-            /*$tags[] = '0.2.1';
-            $tags[] = '0.0.9';
-            $tags[] = '0.1.3';*/
-
             usort($tags, function ($first, $second) {
                 if (version_compare($first, $second, '=')) {
                     return 0;

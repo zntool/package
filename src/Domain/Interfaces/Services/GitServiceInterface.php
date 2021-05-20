@@ -18,6 +18,8 @@ interface GitServiceInterface
 
     public function branches(PackageEntity $packageEntity);
 
+    public function tags(PackageEntity $packageEntity);
+
     public function pushPackage(PackageEntity $packageEntity);
 
     public function isNeedRelease(PackageEntity $packageEntity): bool;
