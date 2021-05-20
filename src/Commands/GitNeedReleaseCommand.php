@@ -87,7 +87,5 @@ class GitNeedReleaseCommand extends BaseCommand
         foreach ($fastCommands as $fastCommand) {
             $output->writeln($fastCommand);
         }
-
-
     }
 }
