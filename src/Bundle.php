@@ -7,6 +7,13 @@ use ZnCore\Base\Libs\App\Base\BaseBundle;
 class Bundle extends BaseBundle
 {
 
+    public function deps(): array
+    {
+        return [
+            new \ZnSandbox\Sandbox\Bundle\Bundle(['all']),
+        ];
+    }
+
     public function console(): array
     {
         return [
