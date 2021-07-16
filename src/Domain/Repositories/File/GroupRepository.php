@@ -46,9 +46,9 @@ class GroupRepository implements ReadRepositoryInterface
         return GroupEntity::class;
     }
 
-    public function relations()
+    /*public function _relations()
     {
         return [];
-    }
+    }*/
 
 }
