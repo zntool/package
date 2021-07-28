@@ -71,4 +71,9 @@ return [
         'provider_name' => 'github',
         'authors' => [],
     ],
+    [
+        'name' => 'znsymfony',
+        'provider_name' => 'github',
+        'authors' => [],
+    ],
 ];
