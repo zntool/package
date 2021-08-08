@@ -12,6 +12,9 @@
   "require": {
     
   },
+  "bin": [
+    "bin/znpackage"
+  ],
   "autoload": {
     "psr-4": {
       "ZnTool\\Package\\": "src",
