@@ -76,4 +76,9 @@ return [
         'provider_name' => 'github',
         'authors' => [],
     ],
+    [
+        'name' => 'znuser',
+        'provider_name' => 'github',
+        'authors' => [],
+    ],
 ];
