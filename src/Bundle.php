@@ -14,6 +14,13 @@ class Bundle extends BaseBundle
         ];
     }
 
+    public function symfonyAdmin(): array
+    {
+        return [
+            __DIR__ . '/Symfony4/Admin/config/routing.php',
+        ];
+    }
+
     public function console(): array
     {
         return [
