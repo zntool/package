@@ -88,7 +88,7 @@ class GitChangedCommand extends BaseCommand
             $dir = realpath($vendorDir) . '/' . $packageId;
             $orgDir = realpath($vendorDir) . '/' . $packageEntity->getGroup()->name;
             if($changedEntity->getStatus() == StatusEnum::CHANGED) {
-                $fastCommands[] = "cd $dir && git add . && git commit -m upd && git push";
+                $fastCommands[] = "cd $dir && git add . && git commit -m upd && git pull && git push";
                 $output->writeln("<fg=yellow> {$packageId}</>");
             } elseif ($changedEntity->getStatus() == StatusEnum::SELECT_BRANCH) {
                 $branches = $this->gitService->branches($changedEntity->getPackage());
