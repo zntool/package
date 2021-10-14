@@ -3,6 +3,11 @@
 namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
+use ZnCore\Domain\Helpers\EntityHelper;
+use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
+use ZnLib\Console\Symfony4\Style\SymfonyStyle;
+use ZnSandbox\Sandbox\Bundle\Domain\Entities\BundleEntity;
+use ZnSandbox\Sandbox\Bundle\Domain\Entities\DomainEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,16 +29,39 @@ class GitNeedReleaseCommand extends BaseCommand
             $output->writeln('');
             return 0;
         }
+
         $totalCollection = $this->displayProgress($collection, $input, $output);
+
         $output->writeln('');
         if ($totalCollection->count() == 0) {
             $output->writeln('<fg=magenta>All packages released!</>');
             $output->writeln('');
             return 0;
         }
-        $this->displayTotal($totalCollection, $input, $output);
+
+        $choices = $this->selectPackages($input, $output, $totalCollection);
+
+//        dd($choices);
+
+        $this->displayTotal($totalCollection, $input, $output, $choices);
         $output->writeln('');
         return 0;
+    }
+
+    private function selectPackages(InputInterface $input, OutputInterface $output, Collection $collection)//: DomainEntity
+    {
+        $packageNames = EntityHelper::getColumn($collection, 'id');
+        $io = new SymfonyStyle($input, $output);
+        $choices = $io->choiceMulti('Select packages', $packageNames);
+        return $choices;
+    }
+
+    private function selectPackageVersion(InputInterface $input, OutputInterface $output, array $versionList)//: DomainEntity
+    {
+//        $packageNames = EntityHelper::getColumn($collection, 'id');
+        $io = new SymfonyStyle($input, $output);
+        $choices = $io->choice('Select version', $versionList);
+        return $choices;
     }
 
     private function displayProgress(Collection $collection, InputInterface $input, OutputInterface $output): Collection
@@ -55,7 +83,7 @@ class GitNeedReleaseCommand extends BaseCommand
         return $totalCollection;
     }
 
-    private function displayTotal(Collection $totalCollection, InputInterface $input, OutputInterface $output)
+    private function displayTotal(Collection $totalCollection, InputInterface $input, OutputInterface $output, array $choices)
     {
         /** @var PackageEntity[] | Collection $totalCollection */
         $output->writeln('<fg=yellow>Need release!</>');
@@ -64,20 +92,33 @@ class GitNeedReleaseCommand extends BaseCommand
         $fastCommands = [];
         foreach ($totalCollection as $packageEntity) {
             $packageId = $packageEntity->getId();
-            $lastVersion = $this->gitService->lastVersion($packageEntity);
+            if(in_array($packageId, $choices)) {
 
-            $version = $lastVersion ? "<fg=blue>{$lastVersion}</>" : "<fg=red>No version</>";
-            $output->writeln("<fg=yellow> {$packageId}:{$version}</>");
 
-            $vendorDir = __DIR__ . '/../../../../';
-            $dir = realpath($vendorDir) . '/' . $packageId;
 
-            $possibleVersionList = VersionHelper::possibleVersionList($lastVersion);
-            $fastCommands[] = "<fg=yellow> {$packageId}:{$version}</>";
-            foreach ($possibleVersionList as $value) {
-                $fastCommands[] = "cd $dir && git tag 'v$value' && git push origin 'v$value'";
+                $lastVersion = $this->gitService->lastVersion($packageEntity);
+
+                $version = $lastVersion ? "<fg=blue>{$lastVersion}</>" : "<fg=red>No version</>";
+                $output->writeln("<fg=yellow> {$packageId}:{$version}</>");
+
+                $vendorDir = __DIR__ . '/../../../../';
+                $dir = realpath($vendorDir) . '/' . $packageId;
+
+                $possibleVersionList = VersionHelper::possibleVersionList($lastVersion);
+                //$fastCommands[] = "<fg=yellow> {$packageId}:{$version}</>";
+
+                $choiceVersion = $this->selectPackageVersion($input, $output, array_values($possibleVersionList));
+
+                $fastCommands[] = "cd $dir && && git tag 'v$choiceVersion' && git push origin 'v$choiceVersion'";
+
+                //dd($choiceVersion);
+
+                /*foreach ($possibleVersionList as $value) {
+                    $fastCommands[] = "cd $dir && && git tag 'v$value' && git push origin 'v$value'";
+                }*/
+//                $fastCommands[] = "";
             }
-            $fastCommands[] = "";
+
         }
 
         $output->writeln('');
