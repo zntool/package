@@ -109,7 +109,7 @@ class GitNeedReleaseCommand extends BaseCommand
 
                 $choiceVersion = $this->selectPackageVersion($input, $output, array_values($possibleVersionList));
 
-                $fastCommands[] = "cd $dir && && git tag 'v$choiceVersion' && git push origin 'v$choiceVersion'";
+                $fastCommands[] = "cd $dir && git tag 'v$choiceVersion' && git push origin 'v$choiceVersion'";
 
                 //dd($choiceVersion);
 
