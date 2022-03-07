@@ -81,4 +81,9 @@ return [
         'provider_name' => 'github',
         'authors' => [],
     ],
+    [
+        'name' => 'zndatabase',
+        'provider_name' => 'github',
+        'authors' => [],
+    ],
 ];
