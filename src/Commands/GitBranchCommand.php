@@ -3,6 +3,7 @@
 namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
+use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,8 +35,12 @@ class GitBranchCommand extends BaseCommand
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();
             $output->write(" $packageId ... ");
-            $result = $this->gitService->branch($packageEntity);
-            $output->writeln($result);
+            $branches = $this->gitService->branches($packageEntity);
+            $branch = $this->gitService->branch($packageEntity);
+            ArrayHelper::removeValue($branches, $branch);
+
+            $branchesString = $branches ? ' (' . implode(', ', $branches) . ')' : '';
+            $output->writeln($branch . $branchesString);
         }
         return $totalCollection;
     }

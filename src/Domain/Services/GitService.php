@@ -101,14 +101,22 @@ class GitService extends BaseService implements GitServiceInterface
         return $result;
     }
 
+    protected function prepareBranches(array $branches): array {
+        foreach ($branches as $i => &$branchItem) {
+            $branchItem = str_replace('remotes/origin/', '', $branchItem);
+            if(strpos($branchItem, 'HEAD ->') !== false) {
+                unset($branches[$i]);
+            }
+        }
+        $branches = array_unique($branches);
+        return $branches;
+    }
+
     public function isHasBranch(PackageEntity $packageEntity, string $branch): bool
     {
         $git = new GitShell($packageEntity->getDirectory());
-        $branches = $git->getBranches();
-        foreach ($branches as &$branchItem) {
-            $branchItem = str_replace('remotes/origin/', '', $branchItem);
-        }
-        $branches = array_unique($branches);
+        $branches = $this->branches();
+
         return in_array($branch, $branches);
     }
 
@@ -196,8 +204,9 @@ class GitService extends BaseService implements GitServiceInterface
     public function branches(PackageEntity $packageEntity)
     {
         $git = new GitShell($packageEntity->getDirectory());
-        $result = $git->getBranches();
-        return $result;
+        $branches = $git->getBranches();
+        $branches = $this->prepareBranches($branches);
+        return $branches;
     }
 
     public function tags(PackageEntity $packageEntity)
