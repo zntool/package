@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Domain\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Domain\Base\BaseService;
@@ -79,6 +80,52 @@ class GitService extends BaseService implements GitServiceInterface
         return $isNeedRelease;
     }
 
+    public function getRootBranch(PackageEntity $packageEntity)
+    {
+        $branches = $this->branches($packageEntity);
+        $branches = array_intersect($branches, ['master', 'main']);
+        return Arr::first($branches);
+    }
+
+    public function checkout(PackageEntity $packageEntity, string $branch)
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+        $result = $git->checkout($branch);
+        return $result;
+    }
+
+    public function fetch(PackageEntity $packageEntity, string $branch = 'master')
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+        $result = $git->fetch('' . $branch);
+        return $result;
+    }
+
+    public function isHasBranch(PackageEntity $packageEntity, string $branch): bool
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+        $branches = $git->getBranches();
+        foreach ($branches as &$branchItem) {
+            $branchItem = str_replace('remotes/origin/', '', $branchItem);
+        }
+        $branches = array_unique($branches);
+        return in_array($branch, $branches);
+    }
+
+    public function createBranch(PackageEntity $packageEntity, string $branch)
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+        $result = $git->createBranch($branch);
+        return $result;
+    }
+
+    public function removeBranch(PackageEntity $packageEntity, string $branch)
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+        $result = $git->removeBranch($branch);
+        return $result;
+    }
+
     public function branch(PackageEntity $packageEntity, string $branch = 'master')
     {
         $git = new GitShell($packageEntity->getDirectory());
@@ -106,6 +153,23 @@ class GitService extends BaseService implements GitServiceInterface
     {
         $git = new GitShell($packageEntity->getDirectory());
         $result = $git->pullWithInfo();
+        if ($result == 'Already up-to-date.') {
+            return false;
+        } else {
+            return $result;
+        }
+    }
+
+    public function push(PackageEntity $packageEntity, $remote = null)
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+
+        if(!$remote) {
+            $remote = $this->branch($packageEntity);
+        }
+        $result = $git->pushWithInfo("--set-upstream origin $remote");
+
+        //$result = $git->pushWithInfo($remote);
         if ($result == 'Already up-to-date.') {
             return false;
         } else {

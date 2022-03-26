@@ -4,6 +4,7 @@ namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
 use ZnCore\Domain\Helpers\EntityHelper;
+use ZnLib\Console\Symfony4\Libs\Command;
 use ZnTool\Package\Domain\Entities\ChangedEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Enums\StatusEnum;
@@ -90,16 +91,20 @@ class GitChangedCommand extends BaseCommand
             if($changedEntity->getStatus() == StatusEnum::CHANGED) {
                 $fastCommands[] = "cd $dir && git add . && git commit -m upd && git pull && git push";
                 $output->writeln("<fg=yellow> {$packageId}</>");
-            } elseif ($changedEntity->getStatus() == StatusEnum::SELECT_BRANCH) {
-                $branches = $this->gitService->branches($changedEntity->getPackage());
-                $branchNames = [];
-                foreach ($changedEntity->getBranches() as $branchName) {
-                    if($this->isBranch($branchName)) {
-                        $branchNames[] = $branchName;
-                    }
-                }
-                $fastCommands[] = "cd $dir && git checkout {$branchNames[0]} && git pull";
-                $output->writeln("<fg=yellow> {$packageId}</>");
+            /*} elseif ($changedEntity->getStatus() == StatusEnum::SELECT_BRANCH) {
+                $rootBranch = $this->gitService->getRootBranch($packageEntity);
+                $command = [];
+                $command[] = "cd $dir";
+                $command[] = "git pull";
+                $fastCommands[] = implode(' && ', $command);
+                $output->writeln("<fg=yellow> {$packageId}</>");*/
+
+                /*$cmd = new Command();
+                $cmd
+                    ->add("cd $dir")
+                    ->add("git pull");
+                $fastCommands[] = $cmd->toString();*/
+
             } elseif ($changedEntity->getStatus() == StatusEnum::NOT_FOUND_REPO) {
                 $packageName = $packageEntity->getName();
                 $gitUrl = $packageEntity->getGitUrl();
@@ -111,7 +116,7 @@ class GitChangedCommand extends BaseCommand
         $output->writeln('');
         $output->writeln('<fg=yellow>Fast command:</>');
         $output->writeln('');
-        
+
         foreach ($fastCommands as $fastCommand) {
             $output->writeln($fastCommand);
         }
