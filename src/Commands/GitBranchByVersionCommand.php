@@ -67,7 +67,7 @@ class GitBranchByVersionCommand extends BaseCommand
             $currentBranch = $this->gitService->branch($packageEntity);
             $hasVersionBranch = $this->gitService->isHasBranch($packageEntity, $targetVersion);
 
-            if(in_array('1.0.x', $this->gitService->branches($packageEntity))) {
+            /*if(in_array('1.0.x', $this->gitService->branches($packageEntity))) {
                 try {
                     $output->writeln(" checkout $rootBranch ... ");
                     $this->gitService->checkout($packageEntity, $rootBranch);
@@ -76,7 +76,7 @@ class GitBranchByVersionCommand extends BaseCommand
                 } catch (\Throwable $e) {
 
                 }
-            }
+            }*/
 
             if ($currentBranch == $targetVersion) {
                 $output->writeln("<fg=green> OK</>");
@@ -140,19 +140,8 @@ class GitBranchByVersionCommand extends BaseCommand
                 $currentBranch = $this->gitService->branch($packageEntity);
                 $hasVersionBranch = $this->gitService->isHasBranch($packageEntity, $targetVersion);
 
-                /*try {
-                    $output->writeln(" checkout $rootBranch ... ");
-                    $this->gitService->checkout($packageEntity, $rootBranch);
-                    $output->writeln(" remove $targetVersion ... ");
-                    $this->gitService->removeBranch($packageEntity, $targetVersion);
-                } catch (\Throwable $e) {
-
-                }
-                continue;*/
-
                 if ($currentBranch == $targetVersion) {
                     $output->writeln("  <fg=green>OK</>");
-                    //continue;
                 } elseif ($hasVersionBranch) {
                     $output->writeln("checkout $targetVersion ... ");
                     $this->gitService->checkout($packageEntity, $targetVersion);
@@ -176,11 +165,11 @@ class GitBranchByVersionCommand extends BaseCommand
 //                    $this->gitService->push($packageEntity, $targetVersion);
 //                    $output->writeln("<fg=green>OK</>");
 
-                    /*$cmd = new Command();
+                    $cmd = new Command();
                     $cmd
                         ->add("cd {$packageEntity->getDirectory()}")
                         ->add("git push --set-upstream origin $targetVersion");
-                    $fastCommands[] = $cmd->toString();*/
+                    $fastCommands[] = $cmd->toString();
 
 //                $fastCommands[] = "cd {$packageEntity->getDirectory()} && git push --set-upstream origin $targetVersion";
 //                    $output->writeln("<fg=yellow> No branch</>");
@@ -199,13 +188,15 @@ class GitBranchByVersionCommand extends BaseCommand
 
         }
 
-        /*$output->writeln('');
-        $output->writeln('<fg=yellow>Fast command:</>');
-        $output->writeln('');
-
-        foreach ($fastCommands as $fastCommand) {
-            $output->writeln($fastCommand);
-        }*/
+        if($fastCommands) {
+            $output->writeln('');
+            $output->writeln('<fg=yellow>Fast command:</>');
+            $output->writeln('');
+            foreach ($fastCommands as $fastCommand) {
+                $output->writeln($fastCommand);
+            }
+            $output->writeln('');
+        }
 
         return $totalCollection;
     }

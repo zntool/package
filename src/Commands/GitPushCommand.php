@@ -77,7 +77,7 @@ class GitPushCommand extends BaseCommand
             $output->write(" $packageId ... ");
             $status = $this->gitService->status($packageEntity);
             $flags = $status['flags'];
-
+dump($status);
             if($flags['needPush'] || $flags['needCommit']) {
                 if($flags['needPush']) {
                     $output->write("<fg=yellow>PUSH</> ");

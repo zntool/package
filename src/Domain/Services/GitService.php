@@ -136,6 +136,7 @@ class GitService extends BaseService implements GitServiceInterface
             'push' => [
 
             ],
+            'rawLines' => $status,
         ];
 
         if($matches = $git->matchText($status, 'On branch ([\S]+)')) {
