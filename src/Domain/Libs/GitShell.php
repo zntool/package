@@ -187,11 +187,19 @@ class GitShell extends BaseShell
      * @throws ShellException
      * @return static
      */
-    public function removeBranch($name)
+    public function removeLocalBranch($name)
     {
         return $this
             ->begin()
-            ->run('git branch', ['-d' => $name,])
+            ->run("git branch -D $name")
+            ->end();
+    }
+
+    public function removeRemoteBranch($name, string $remote = 'origin')
+    {
+        return $this
+            ->begin()
+            ->run("git push -d $remote $name")
             ->end();
     }
 

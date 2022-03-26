@@ -115,7 +115,7 @@ class GitService extends BaseService implements GitServiceInterface
     public function isHasBranch(PackageEntity $packageEntity, string $branch): bool
     {
         $git = new GitShell($packageEntity->getDirectory());
-        $branches = $this->branches();
+        $branches = $this->branches($packageEntity);
 
         return in_array($branch, $branches);
     }
@@ -190,7 +190,8 @@ class GitService extends BaseService implements GitServiceInterface
     public function removeBranch(PackageEntity $packageEntity, string $branch)
     {
         $git = new GitShell($packageEntity->getDirectory());
-        $result = $git->removeBranch($branch);
+        $result = $git->removeLocalBranch($branch);
+        $result = $git->removeRemoteBranch($branch);
         return $result;
     }
 
