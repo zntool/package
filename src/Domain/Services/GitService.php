@@ -151,6 +151,7 @@ class GitService extends BaseService implements GitServiceInterface
             $info['flags']['needPush'] = true;
         } elseif($matches = $git->matchText($status, 'Your branch is up to date with \'origin\/(.+)\'\.')) {
             $info['push']['isUpToDateWith'] = $matches[0][1];
+            $info['push']['aheadCommitCount'] = '?';
             $info['flags']['needPush'] = $matches[0][1] != $info['branch'];
         }
 

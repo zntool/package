@@ -55,15 +55,6 @@ class GitPushCommand extends BaseCommand
             $output->writeln($result);
         }
 
-        /*$output->writeln('');
-        if ($totalCollection->count() == 0) {
-            $output->writeln('<fg=magenta>All packages already up-to-date!</>');
-            $output->writeln('');
-            return 0;
-        }
-        $this->displayTotal($totalCollection, $input, $output);
-        $output->writeln('');*/
-
         return 0;
     }
 
@@ -77,10 +68,10 @@ class GitPushCommand extends BaseCommand
             $output->write(" $packageId ... ");
             $status = $this->gitService->status($packageEntity);
             $flags = $status['flags'];
-dump($status);
+
             if($flags['needPush'] || $flags['needCommit']) {
                 if($flags['needPush']) {
-                    $output->write("<fg=yellow>PUSH</> ");
+                    $output->write("<fg=yellow>PUSH {$flags['aheadCommitCount']}</> ");
                     $totalCollection->add($packageEntity);
                 }
                 if($flags['needCommit']) {
@@ -91,19 +82,6 @@ dump($status);
                 $output->write("<fg=green>OK</> ");
             }
             $output->writeln("");
-
-//
-
-            /*dd($packageEntity->getId(), $isActual);
-
-            $output->write(" $packageId ... ");
-            $result = $this->gitService->pushPackage($packageEntity);
-            if ($result == 'Already up to date.') {
-                $result = "<fg=green>{$result}</>";
-            } else {
-                $totalCollection->add($packageEntity);
-            }
-            $output->writeln($result);*/
         }
         return $totalCollection;
     }
