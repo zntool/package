@@ -72,16 +72,13 @@ class GitPushCommand extends BaseCommand
             if($flags['needPush'] || $flags['needCommit']) {
                 $actions = [];
                 if($flags['needPush']) {
-                    $actions[] = "<fg=yellow>PUSH {$status['push']['aheadCommitCount']}</> ";
-//                    $output->write();
+                    $actions[] = "<fg=yellow>PUSH {$status['push']['aheadCommitCount']}</>";
                     $totalCollection->add($packageEntity);
                 }
                 if($flags['needCommit']) {
-                    $actions[] = "<fg=yellow>MODIFY</> ";
-//                    $output->write("<fg=yellow>MODIFY</> ");
+                    $actions[] = "<fg=yellow>MODIFY</>";
                 }
                 $output->write(implode(' <fg=white>|</> ', $actions));
-//                dump($status);
             } else {
                 $output->write("<fg=green>OK</> ");
             }
