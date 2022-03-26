@@ -2,6 +2,8 @@
 
 namespace ZnTool\Package\Domain\Libs;
 
+use Illuminate\Support\Arr;
+use ZnCore\Base\Helpers\StringHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
 use ZnCore\Base\Libs\Shell\BaseShell;
@@ -385,6 +387,15 @@ class GitShell extends BaseShell
         return false;
     }
 
+    public function status()
+    {
+        $this->begin();
+        $outputLines = null;
+        $lastLine = $this->runExec('git status', $outputLines);
+        $this->end();
+        return $outputLines;
+    }
+
     private function searchText(array $lines, $needles) {
         foreach ($lines as $line) {
             foreach ($needles as $needle) {
@@ -395,6 +406,58 @@ class GitShell extends BaseShell
             }
         }
         return false;
+    }
+
+    public function searchText2(array $lines, $needles) {
+        $needles = ArrayHelper::toArray($needles);
+        foreach ($lines as $line) {
+            foreach ($needles as $needle) {
+                $isHas = strpos(mb_strtolower($line), mb_strtolower($needle)) !== false;
+                if($isHas) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function matchText(array $lines, $needles) {
+        $needles = ArrayHelper::toArray($needles);
+        $mathesResult = [];
+        foreach ($lines as $line) {
+            $line = StringHelper::removeDoubleSpace($line);
+            $line = trim($line);
+            foreach ($needles as $needleIndex => $needle) {
+                $needle = str_replace(' ', '\s', $needle);
+                $expression = "/{$needle}/i";
+//                dump($expression);
+                $isMath = preg_match($expression, $line, $mathes);
+                if($isMath) {
+                    $mathesResult[$needleIndex] = $mathes;
+                }
+            }
+        }
+        return $mathesResult;
+    }
+
+    public function matchTextAll(array $lines, $needles) {
+        $needles = ArrayHelper::toArray($needles);
+        $mathesResult = [];
+        //$lines = [implode("\n", $lines)];
+        foreach ($lines as $line) {
+            $line = StringHelper::removeDoubleSpace($line);
+            $line = trim($line);
+            foreach ($needles as $needleIndex => $needle) {
+                $needle = str_replace(' ', '\s', $needle);
+                $expression = "/{$needle}/i";
+//                dump($expression);
+                $isMath = preg_match_all($expression, $line, $mathes);
+                if($isMath) {
+                    $mathesResult[] = $mathes;
+                }
+            }
+        }
+        return $mathesResult;
     }
 
     public function clone($remote = null, array $params = null)

@@ -42,13 +42,32 @@ class GitPushCommand extends BaseCommand
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();
             $output->write(" $packageId ... ");
+            $status = $this->gitService->status($packageEntity);
+            $flags = $status['flags'];
+
+            if($flags['hasChangesForPush'] || $flags['hasChangesForCommit']) {
+                if($flags['hasChangesForPush']) {
+                    $output->write("<fg=yellow>PUSH</> ");
+                    $totalCollection->add($packageEntity);
+                }
+                if($flags['hasChangesForCommit']) {
+                    $output->write("<fg=yellow>MODIFY</> ");
+                }
+            } else {
+                $output->write("<fg=green>OK</> ");
+            }
+            $output->writeln("");
+
+            /*dd($packageEntity->getId(), $isActual);
+
+            $output->write(" $packageId ... ");
             $result = $this->gitService->pushPackage($packageEntity);
             if ($result == 'Already up to date.') {
                 $result = "<fg=green>{$result}</>";
             } else {
                 $totalCollection->add($packageEntity);
             }
-            $output->writeln($result);
+            $output->writeln($result);*/
         }
         return $totalCollection;
     }

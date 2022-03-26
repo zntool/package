@@ -112,6 +112,56 @@ class GitService extends BaseService implements GitServiceInterface
         return in_array($branch, $branches);
     }
 
+    public function status(PackageEntity $packageEntity): array
+    {
+        $git = new GitShell($packageEntity->getDirectory());
+        $currentBranch = $this->branch($packageEntity);
+        $status = $git->status();
+        $info = [
+            'flags' => [
+                'hasUntracked' => false,
+                'hasModified' => false,
+                'hasChangesForPush' => false,
+                'hasChangesForCommit' => false,
+            ],
+        ];
+
+        if($matches = $git->matchText($status, 'On branch ([\S]+)')) {
+            $info['branch'] = $matches[0][1];
+        }
+
+        if($matches = $git->matchText($status, 'Your branch is up to date with \'origin\/(.+)\'\.')) {
+            $info['isUpToDateWith'] = $matches[0][1];
+            $info['flags']['hasChangesForPush'] = $matches[0][1] != $info['branch'];
+        }
+
+        if($matches = $git->matchText($status, 'Untracked files:')) {
+            $info['flags']['hasUntracked'] = true;
+        }
+
+        if($matches = $git->matchText($status, 'Changes not staged for commit:')) {
+            $matches2 = $git->matchTextAll($status, '(modified|deleted):\s+(.+)');
+            $hasModified  = false;
+            foreach ($matches2 as $item) {
+                $action = $item[1][0];
+                $file = $item[2][0];
+                $info[$action][] = $file;
+                $hasModified  = true;
+            }
+            $info['flags']['hasModified'] = $hasModified;
+        }
+
+        /*if($git->searchText2($status, 'nothing to commit, working tree clean')) {
+            $info['flags']['hasChangesForCommit'] = false;
+        } else {
+            $info['flags']['hasChangesForCommit'] = $info['flags']['hasUntracked'] || $info['flags']['hasModified'];
+        }*/
+
+        $info['flags']['hasChangesForCommit'] = $info['flags']['hasUntracked'] || $info['flags']['hasModified'];
+
+        return $info;
+    }
+
     public function createBranch(PackageEntity $packageEntity, string $branch)
     {
         $git = new GitShell($packageEntity->getDirectory());
