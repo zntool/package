@@ -3,6 +3,9 @@
 namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
+use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
+use ZnCore\Domain\Helpers\EntityHelper;
+use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,14 +26,44 @@ class GitPushCommand extends BaseCommand
             return 0;
         }
         $totalCollection = $this->displayProgress($collection, $input, $output);
+
+        if($totalCollection->isEmpty()) {
+            $output->writeln('');
+            $output->writeln('<fg=yellow>No changes</>');
+            $output->writeln('');
+            return 0;
+        }
+
+        $totalArray = EntityHelper::indexingCollection($totalCollection, 'id');
+
         $output->writeln('');
+        $question = new ChoiceQuestion(
+            'Select packages for push:',
+            EntityHelper::getColumn($totalCollection, 'id'),
+            'a'
+        );
+        $question->setMultiselect(true);
+        $selectedPackages = $this->getHelper('question')->ask($input, $output, $question);
+
+        foreach ($selectedPackages as $packageId) {
+            $packageEntity = $totalArray[$packageId];
+            $output->write("$packageId ... ");
+            $result = $this->gitService->pushPackage($packageEntity);
+            if ($result == 'Already up to date.') {
+                $result = "<fg=green>{$result}</>";
+            }
+            $output->writeln($result);
+        }
+
+        /*$output->writeln('');
         if ($totalCollection->count() == 0) {
             $output->writeln('<fg=magenta>All packages already up-to-date!</>');
             $output->writeln('');
             return 0;
         }
         $this->displayTotal($totalCollection, $input, $output);
-        $output->writeln('');
+        $output->writeln('');*/
+
         return 0;
     }
 
