@@ -45,18 +45,21 @@ class GitPushCommand extends BaseCommand
             $status = $this->gitService->status($packageEntity);
             $flags = $status['flags'];
 
-            if($flags['hasChangesForPush'] || $flags['hasChangesForCommit']) {
-                if($flags['hasChangesForPush']) {
+            if($flags['needPush'] || $flags['needCommit']) {
+                if($flags['needPush']) {
                     $output->write("<fg=yellow>PUSH</> ");
                     $totalCollection->add($packageEntity);
                 }
-                if($flags['hasChangesForCommit']) {
+                if($flags['needCommit']) {
                     $output->write("<fg=yellow>MODIFY</> ");
                 }
+//                dump($status);
             } else {
                 $output->write("<fg=green>OK</> ");
             }
             $output->writeln("");
+
+//
 
             /*dd($packageEntity->getId(), $isActual);
 

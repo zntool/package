@@ -118,11 +118,15 @@ class GitService extends BaseService implements GitServiceInterface
         $currentBranch = $this->branch($packageEntity);
         $status = $git->status();
         $info = [
+            'branch' => null,
             'flags' => [
                 'hasUntracked' => false,
                 'hasModified' => false,
-                'hasChangesForPush' => false,
-                'hasChangesForCommit' => false,
+                'needPush' => false,
+                'needCommit' => false,
+            ],
+            'push' => [
+
             ],
         ];
 
@@ -130,9 +134,15 @@ class GitService extends BaseService implements GitServiceInterface
             $info['branch'] = $matches[0][1];
         }
 
-        if($matches = $git->matchText($status, 'Your branch is up to date with \'origin\/(.+)\'\.')) {
-            $info['isUpToDateWith'] = $matches[0][1];
-            $info['flags']['hasChangesForPush'] = $matches[0][1] != $info['branch'];
+        //'Your branch is ahead of \'origin/(.+)\' by (\d+) commit'
+
+        if($matches = $git->matchText($status, 'Your branch is ahead of \'origin\/(.+)\' by (\d+) commit')) {
+            $info['push']['isUpToDateWith'] = $matches[0][1];
+            $info['push']['aheadCommitCount'] = $matches[0][2];
+            $info['flags']['needPush'] = true;
+        } elseif($matches = $git->matchText($status, 'Your branch is up to date with \'origin\/(.+)\'\.')) {
+            $info['push']['isUpToDateWith'] = $matches[0][1];
+            $info['flags']['needPush'] = $matches[0][1] != $info['branch'];
         }
 
         if($matches = $git->matchText($status, 'Untracked files:')) {
@@ -151,13 +161,13 @@ class GitService extends BaseService implements GitServiceInterface
             $info['flags']['hasModified'] = $hasModified;
         }
 
-        /*if($git->searchText2($status, 'nothing to commit, working tree clean')) {
-            $info['flags']['hasChangesForCommit'] = false;
+        if($git->searchText2($status, 'nothing to commit, working tree clean')) {
+            $info['flags']['needCommit'] = false;
         } else {
-            $info['flags']['hasChangesForCommit'] = $info['flags']['hasUntracked'] || $info['flags']['hasModified'];
-        }*/
+            $info['flags']['needCommit'] = $info['flags']['hasUntracked'] || $info['flags']['hasModified'];
+        }
 
-        $info['flags']['hasChangesForCommit'] = $info['flags']['hasUntracked'] || $info['flags']['hasModified'];
+//        $info['flags']['needCommit'] = $info['flags']['hasUntracked'] || $info['flags']['hasModified'];
 
         return $info;
     }
