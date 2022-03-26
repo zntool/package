@@ -82,8 +82,8 @@ class GitBranchByVersionCommand extends BaseCommand
                 $output->writeln("<fg=green> OK</>");
                 //continue;
             } elseif ($hasVersionBranch) {
-                $output->writeln(" checkout $targetVersion ... ");
-                $this->gitService->checkout($packageEntity, $targetVersion);
+//                $output->writeln(" checkout $targetVersion ... ");
+//                $this->gitService->checkout($packageEntity, $targetVersion);
                 $totalCollection->add($packageEntity);
                 $output->writeln("<fg=yellow> Need checkout</>");
             } else {
@@ -133,6 +133,7 @@ class GitBranchByVersionCommand extends BaseCommand
         foreach ($totalCollection as $packageEntity) {
             $packageId = $packageEntity->getId();
             if(in_array($packageId, $selectedPackages)) {
+
                 $output->writeln("");
                 $output->writeln("<fg=white>$packageId");
 
@@ -140,10 +141,27 @@ class GitBranchByVersionCommand extends BaseCommand
                 $currentBranch = $this->gitService->branch($packageEntity);
                 $hasVersionBranch = $this->gitService->isHasBranch($packageEntity, $targetVersion);
 
+                if($currentBranch != $targetVersion) {
+                    if(!$hasVersionBranch) {
+                        $output->write("  fetch $targetVersion ... ");
+                        try {
+                            $ee = @$this->gitService->fetch($packageEntity, $targetVersion);
+                        } catch (\Throwable $e) {
+                            $ee = false;
+                        }
+                        if($ee) {
+                            $output->writeln("  <fg=green>OK</>");
+                        } else {
+                            $output->writeln("  <fg=yellow>Not found in remote</>");
+                        }
+                    }
+                }
+                $hasVersionBranch = $this->gitService->isHasBranch($packageEntity, $targetVersion);
+
                 if ($currentBranch == $targetVersion) {
                     $output->writeln("  <fg=green>OK</>");
                 } elseif ($hasVersionBranch) {
-                    $output->writeln("checkout $targetVersion ... ");
+                    $output->write("checkout $targetVersion ... ");
                     $this->gitService->checkout($packageEntity, $targetVersion);
                     $output->writeln("<fg=green>OK</>");
                 } else {

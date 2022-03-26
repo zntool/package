@@ -94,10 +94,10 @@ class GitService extends BaseService implements GitServiceInterface
         return $result;
     }
 
-    public function fetch(PackageEntity $packageEntity, string $branch = 'master')
+    public function fetch(PackageEntity $packageEntity, string $branch = '', string $remote = 'origin')
     {
         $git = new GitShell($packageEntity->getDirectory());
-        $result = $git->fetch('' . $branch);
+        $result = $git->fetch("$remote $branch");
         return $result;
     }
 
