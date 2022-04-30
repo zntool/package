@@ -4,7 +4,6 @@ namespace ZnTool\Package\Domain\Libs;
 
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Libs\Store\StoreFile;
-use yii2rails\domain\enums\RelationEnum;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
