@@ -54,7 +54,7 @@ class GitBranchByVersionCommand extends BaseCommand
         /** @var PackageEntity[] | Collection $totalCollection */
         $totalCollection = new Collection;
 
-        $targetVersion = '0.x';
+        $targetVersion = $_ENV['ZN_VERSION'] ?? '0.x';
 
         $fastCommands = [];
 
