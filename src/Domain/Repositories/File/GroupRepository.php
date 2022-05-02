@@ -3,7 +3,7 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use ZnCore\Domain\Helpers\EntityHelper;
-use ZnCore\Domain\Interfaces\Entity\EntityIdInterface;
+use ZnCore\Contract\Domain\Interfaces\Entities\EntityIdInterface;
 use ZnCore\Domain\Interfaces\Repository\ReadRepositoryInterface;
 use ZnCore\Domain\Libs\Query;
 use ZnCore\Base\Libs\Store\StoreFile;
