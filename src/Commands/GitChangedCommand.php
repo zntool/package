@@ -72,7 +72,7 @@ class GitChangedCommand extends BaseCommand
     }
 
     private function isBranch(string $branchName): bool {
-        return preg_match('/^([a-z\d]+[-_]?)*[a-z\d]$/i', $branchName);
+        return preg_match('/^([a-z\d]+[-_]?)*[a-z\d]$/i', $branchName) || preg_match('/^\d+.+x$/i', $branchName);
     }
 
     private function displayTotal(Collection $totalCollection, InputInterface $input, OutputInterface $output)
