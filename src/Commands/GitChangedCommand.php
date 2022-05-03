@@ -81,6 +81,8 @@ class GitChangedCommand extends BaseCommand
         $output->writeln('<fg=yellow>Has changes:</>');
         $output->writeln('');
 
+        $targetVersion = $_ENV['ZN_VERSION'] ?? '0.x';
+        
         $fastCommands = [];
         foreach ($totalCollection as $changedEntity) {
             $packageEntity = $changedEntity->getPackage();
@@ -108,7 +110,7 @@ class GitChangedCommand extends BaseCommand
             } elseif ($changedEntity->getStatus() == StatusEnum::NOT_FOUND_REPO) {
                 $packageName = $packageEntity->getName();
                 $gitUrl = $packageEntity->getGitUrl();
-                $fastCommands[] = "cd $orgDir && mkdir -p bak && mv -f {$packageName} bak/{$packageName} && git clone $gitUrl && cp -rp bak/{$packageName}/* {$packageName}/ && rm -rf bak/*";
+                $fastCommands[] = "cd $orgDir && mkdir -p bak && mv -f {$packageName} bak/{$packageName} && git clone -b $targetVersion $gitUrl && cp -rp bak/{$packageName}/* {$packageName}/ && rm -rf bak/*";
                 $output->writeln("<fg=magenta> {$packageId}</>");
             }
         }
