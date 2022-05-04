@@ -3,6 +3,7 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use Illuminate\Support\Collection;
+use ZnCore\Base\Helpers\FindFileHelper;
 use ZnCore\Contract\Domain\Interfaces\Entities\EntityIdInterface;
 use ZnCore\Domain\Libs\Query;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
@@ -33,7 +34,7 @@ class PackageRepository implements PackageRepositoryInterface
     {
         $vendorDir = realpath(self::VENDOR_DIR);
 
-        $groups = FileHelper::scanDir($vendorDir);
+        $groups = FindFileHelper::scanDir($vendorDir);
         /** @var GroupEntity[] $groupCollection */
         $groupCollection = new Collection;
 
@@ -49,7 +50,7 @@ class PackageRepository implements PackageRepositoryInterface
         foreach ($groupCollection as $groupEntity) {
             $dir = $vendorDir . DIRECTORY_SEPARATOR . $groupEntity->name;
 
-            $names = FileHelper::scanDir($dir);
+            $names = FindFileHelper::scanDir($dir);
 
             foreach ($names as $name) {
                 $packageEntity = new PackageEntity;
@@ -75,7 +76,7 @@ class PackageRepository implements PackageRepositoryInterface
         $collection = new Collection;
         foreach ($groupCollection as $groupEntity) {
             $dir = $vendorDir . DIRECTORY_SEPARATOR . $groupEntity->name;
-            $names = FileHelper::scanDir($dir);
+            $names = FindFileHelper::scanDir($dir);
             foreach ($names as $name) {
                 $packageEntity = new PackageEntity;
                 $packageEntity->setName($name);
