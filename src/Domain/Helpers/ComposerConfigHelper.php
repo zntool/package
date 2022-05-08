@@ -5,6 +5,7 @@ namespace ZnTool\Package\Domain\Helpers;
 use Illuminate\Support\Collection;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
+use ZnCore\Base\Libs\FileSystem\Helpers\FileStorageHelper;
 use ZnTool\Package\Domain\Entities\ConfigEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 
@@ -34,7 +35,7 @@ class ComposerConfigHelper
         $phpScripts = FileHelper::findFiles($dir, $options);
         $depss = [];
         foreach ($phpScripts as $phpScriptFileName) {
-            $code = FileHelper::load($phpScriptFileName);
+            $code = FileStorageHelper::load($phpScriptFileName);
             preg_match_all('#use\s+(.+);#iu', $code, $matches);
             if(!empty($matches[1])) {
                 $depss = array_merge($depss, $matches[1]);
