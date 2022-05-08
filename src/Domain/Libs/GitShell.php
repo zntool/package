@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use ZnCore\Base\Helpers\StringHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
+use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
 use ZnCore\Base\Libs\Shell\BaseShell;
 use ZnCore\Base\Libs\Shell\ShellException;
 
@@ -690,7 +691,7 @@ class GitShell extends BaseShell
         if ($directory === null) {
             $directory = self::extractRepositoryNameFromUrl($url);
             $directory = "$cwd/$directory";
-        } elseif ( ! FileHelper::isAbsolute($directory)) {
+        } elseif ( ! FilePathHelper::isAbsolute($directory)) {
             $directory = "$cwd/$directory";
         }
         if ($params === null) {

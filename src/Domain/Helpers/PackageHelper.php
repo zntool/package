@@ -3,6 +3,7 @@
 namespace ZnTool\Package\Domain\Helpers;
 
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
+use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
 
 class PackageHelper
 {
@@ -21,7 +22,7 @@ class PackageHelper
             $partName = trim($partName, '\\');
             $fileName = $nsArray['path'] . '\\' . $partName;
         } else {
-            $fileName = FileHelper::rootPath() . '\\' . $namespace;
+            $fileName = FilePathHelper::rootPath() . '\\' . $namespace;
         }
         $fileName = str_replace('\\', '/', $fileName);
         return $fileName;
