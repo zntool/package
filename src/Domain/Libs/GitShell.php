@@ -7,8 +7,8 @@ use ZnCore\Base\Helpers\StringHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
 use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
-use ZnCore\Base\Libs\Shell\BaseShell;
-use ZnCore\Base\Libs\Shell\ShellException;
+use ZnLib\Console\Domain\Base\BaseShell;
+use ZnLib\Console\Domain\Exceptions\ShellException;
 
 class GitShell extends BaseShell
 {
