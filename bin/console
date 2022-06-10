@@ -6,10 +6,12 @@ use ZnCore\Base\Libs\App\Factories\KernelFactory;
 
 require __DIR__ . '/../../../autoload.php';
 
-$bundles = [
+\ZnCore\Base\Helpers\DeprecateHelper::hardThrow();
+
+/*$bundles = [
     new \ZnCore\Base\Libs\App\Bundle(['all']),
     new \ZnTool\Package\Bundle(['container', 'console']),
 ];
 $kernel = KernelFactory::createConsoleKernel($bundles);
 $application = ApplicationFactory::createConsole($kernel);
-$application->run();
+$application->run();*/

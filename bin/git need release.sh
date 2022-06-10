@@ -1,2 +1,3 @@
 #!/bin/sh
-php console package:git:need-release
+cd ../../../bin
+php zn package:git:need-release

@@ -1,2 +1,3 @@
 #!/bin/sh
-php console package:git:stash:all
+cd ../../../bin
+php zn package:git:stash:all

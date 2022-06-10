@@ -1,2 +1,3 @@
 #!/bin/sh
-php console package:github:orgs
+cd ../../../bin
+php zn package:github:orgs

@@ -1,2 +1,3 @@
 #!/bin/sh
-php console package:git:version
+cd ../../../bin
+php zn package:git:version

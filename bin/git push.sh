@@ -1,2 +1,3 @@
 #!/bin/sh
-php console package:git:push
+cd ../../../bin
+php zn package:git:push

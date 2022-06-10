@@ -1,2 +1,3 @@
 #!/bin/sh
-php console package:git:branch
+cd ../../../bin
+php zn package:git:branch
