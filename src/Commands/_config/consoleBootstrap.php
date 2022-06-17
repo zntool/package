@@ -6,6 +6,8 @@ use ZnCore\Base\Libs\DotEnv\DotEnv;
 
 DotEnv::init();
 
+\ZnCore\Base\Helpers\DeprecateHelper::hardThrow();
+
 $kernel = new Kernel('console');
 $container = $kernel->getContainer();
 
