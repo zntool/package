@@ -3,7 +3,7 @@
 namespace ZnTool\Package\Domain\Libs;
 
 use Illuminate\Support\Arr;
-use ZnCore\Base\Helpers\StringHelper;
+use ZnCore\Base\Libs\Text\Helpers\StringHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
 use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
