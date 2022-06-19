@@ -3,10 +3,11 @@
 namespace ZnTool\Package\Domain\Libs;
 
 use Illuminate\Support\Arr;
-use ZnCore\Base\Libs\Text\Helpers\StringHelper;
+
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
 use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
+use ZnCore\Base\Libs\Text\Helpers\TextHelper;
 use ZnLib\Console\Domain\Base\BaseShell;
 use ZnLib\Console\Domain\Exceptions\ShellException;
 
@@ -434,7 +435,7 @@ class GitShell extends BaseShell
         $needles = ArrayHelper::toArray($needles);
         $mathesResult = [];
         foreach ($lines as $line) {
-            $line = StringHelper::removeDoubleSpace($line);
+            $line = TextHelper::removeDoubleSpace($line);
             $line = trim($line);
             foreach ($needles as $needleIndex => $needle) {
                 $needle = str_replace(' ', '\s', $needle);
@@ -454,7 +455,7 @@ class GitShell extends BaseShell
         $mathesResult = [];
         //$lines = [implode("\n", $lines)];
         foreach ($lines as $line) {
-            $line = StringHelper::removeDoubleSpace($line);
+            $line = TextHelper::removeDoubleSpace($line);
             $line = trim($line);
             foreach ($needles as $needleIndex => $needle) {
                 $needle = str_replace(' ', '\s', $needle);

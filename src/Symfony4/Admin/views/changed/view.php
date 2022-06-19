@@ -6,8 +6,9 @@
  * @var $entity EntityIdInterface
  */
 
+use ZnCore\Base\Libs\Text\Helpers\TextHelper;
 use ZnTool\Package\Domain\Entities\ApiKeyEntity;
-use ZnCore\Base\Libs\Text\Helpers\StringHelper;
+
 use ZnCore\Base\Libs\I18Next\Facades\I18Next;
 use ZnCore\Contract\Domain\Interfaces\Entities\EntityIdInterface;
 use ZnLib\Web\Symfony4\MicroApp\Helpers\ActionHelper;
@@ -35,7 +36,7 @@ $attributes = [
         'label' => I18Next::t('core', 'main.attribute.value'),
 //        'attributeName' => 'value',
         'value' => function(ApiKeyEntity $apiKeyEntity) {
-            return StringHelper::mask($apiKeyEntity->getValue(), 3);
+            return TextHelper::mask($apiKeyEntity->getValue(), 3);
         },
     ],
     [
