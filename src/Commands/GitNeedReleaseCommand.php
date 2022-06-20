@@ -3,7 +3,7 @@
 namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
-use ZnCore\Domain\Helpers\EntityHelper;
+use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnLib\Console\Symfony4\Style\SymfonyStyle;
 use ZnSandbox\Sandbox\Bundle\Domain\Entities\BundleEntity;

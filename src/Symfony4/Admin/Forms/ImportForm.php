@@ -10,12 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use ZnCore\Base\Libs\I18Next\Facades\I18Next;
-use ZnCore\Base\Libs\Entity\Interfaces\ValidateEntityByMetadataInterface;
+use ZnCore\Base\Libs\Validation\Interfaces\ValidationByMetadataInterface;
 use ZnLib\Web\Symfony4\MicroApp\Interfaces\BuildFormInterface;
 use ZnTool\Package\Domain\Entities\UserEntity;
 use ZnTool\Package\Domain\Interfaces\Services\UserServiceInterface;
 
-class ImportForm implements ValidateEntityByMetadataInterface, BuildFormInterface
+class ImportForm implements ValidationByMetadataInterface, BuildFormInterface
 {
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)

@@ -6,9 +6,9 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use ZnCore\Contract\Domain\Interfaces\Entities\EntityIdInterface;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use Symfony\Component\Validator\Constraints as Assert;
-use ZnCore\Base\Libs\Entity\Interfaces\ValidateEntityByMetadataInterface;
+use ZnCore\Base\Libs\Validation\Interfaces\ValidationByMetadataInterface;
 
-class ConfigEntity implements ValidateEntityByMetadataInterface, EntityIdInterface
+class ConfigEntity implements ValidationByMetadataInterface, EntityIdInterface
 {
 
     private $id = null;

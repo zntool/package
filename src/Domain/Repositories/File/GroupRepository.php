@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
-use ZnCore\Domain\Helpers\EntityHelper;
+use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnCore\Contract\Domain\Interfaces\Entities\EntityIdInterface;
 use ZnCore\Domain\Interfaces\Repository\ReadRepositoryInterface;
 use ZnCore\Domain\Libs\Query;

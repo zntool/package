@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Base\Enums\Http\HttpMethodEnum;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
 use ZnCore\Base\Libs\Store\Helpers\StoreHelper;
-use ZnCore\Domain\Helpers\EntityHelper;
+use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 
