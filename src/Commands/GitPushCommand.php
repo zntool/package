@@ -4,6 +4,7 @@ namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
@@ -34,12 +35,12 @@ class GitPushCommand extends BaseCommand
             return 0;
         }
 
-        $totalArray = EntityHelper::indexingCollection($totalCollection, 'id');
+        $totalArray = CollectionHelper::indexing($totalCollection, 'id');
 
         $output->writeln('');
         $question = new ChoiceQuestion(
             'Select packages for push:',
-            EntityHelper::getColumn($totalCollection, 'id'),
+            CollectionHelper::getColumn($totalCollection, 'id'),
             'a'
         );
         $question->setMultiselect(true);

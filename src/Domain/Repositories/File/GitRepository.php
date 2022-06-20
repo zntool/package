@@ -3,6 +3,7 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use Illuminate\Support\Collection;
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\GitEntity;
@@ -82,7 +83,7 @@ class GitRepository implements GitRepositoryInterface
             "date",
             "message",
         ];
-        $commitCollection = EntityHelper::createEntityCollection(CommitEntity::class, $commits, $fieldsOnly);
+        $commitCollection = CollectionHelper::create(CommitEntity::class, $commits, $fieldsOnly);
         return $commitCollection;
     }
 
@@ -90,7 +91,7 @@ class GitRepository implements GitRepositoryInterface
     {
         $git = new GitShell($packageEntity->getDirectory());
         $tags = $git->getTagsSha();
-        $tagCollection = EntityHelper::createEntityCollection(TagEntity::class, $tags);
+        $tagCollection = CollectionHelper::create(TagEntity::class, $tags);
         return $tagCollection;
     }
 }

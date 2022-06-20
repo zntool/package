@@ -3,6 +3,7 @@
 namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnLib\Console\Symfony4\Style\SymfonyStyle;
@@ -50,7 +51,7 @@ class GitNeedReleaseCommand extends BaseCommand
 
     private function selectPackages(InputInterface $input, OutputInterface $output, Collection $collection)//: DomainEntity
     {
-        $packageNames = EntityHelper::getColumn($collection, 'id');
+        $packageNames = CollectionHelper::getColumn($collection, 'id');
         $io = new SymfonyStyle($input, $output);
         $choices = $io->choiceMulti('Select packages', $packageNames);
         return $choices;

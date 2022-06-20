@@ -5,6 +5,7 @@ namespace ZnTool\Package\Symfony4\Admin\Controllers;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnLib\Web\Symfony4\MicroApp\BaseWebController;
 use ZnLib\Web\Symfony4\MicroApp\Interfaces\ControllerAccessInterface;
@@ -88,7 +89,7 @@ class ChangedController extends BaseWebController implements ControllerAccessInt
 
         }
         $tableCollection = $this->schemaRepository->allTables();
-        $tableList = EntityHelper::getColumn($tableCollection, 'name');
+        $tableList = CollectionHelper::getColumn($tableCollection, 'name');
         $entityNames = [];
         foreach ($tableList as $tableName) {
             $bundleName = TableMapperHelper::extractDomainNameFromTable($tableName);

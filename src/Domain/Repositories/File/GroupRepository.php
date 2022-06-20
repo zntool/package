@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnCore\Contract\Domain\Interfaces\Entities\EntityIdInterface;
 use ZnCore\Base\Libs\Repository\Interfaces\ReadRepositoryInterface;
@@ -27,7 +28,7 @@ class GroupRepository implements ReadRepositoryInterface
         //return $collection;
 
         $entityClass = $this->getEntityClass();
-        return EntityHelper::createEntityCollection($entityClass, $array);
+        return CollectionHelper::create($entityClass, $array);
     }
 
     public function count(Query $query = null): int

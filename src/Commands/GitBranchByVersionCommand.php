@@ -5,6 +5,7 @@ namespace ZnTool\Package\Commands;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnLib\Console\Symfony4\Libs\Command;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
@@ -123,7 +124,7 @@ class GitBranchByVersionCommand extends BaseCommand
         $output->writeln('');
         $question = new ChoiceQuestion(
             'Select packages for push:',
-            EntityHelper::getColumn($totalCollection, 'id'),
+            CollectionHelper::getColumn($totalCollection, 'id'),
             'a'
         );
         $question->setMultiselect(true);

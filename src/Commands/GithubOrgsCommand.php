@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Base\Enums\Http\HttpMethodEnum;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Store\Helpers\StoreHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnTool\Package\Domain\Entities\GroupEntity;
@@ -49,7 +50,7 @@ class GithubOrgsCommand extends BaseCommand
             }
         }
         $fileName = 'vendor/zntool/dev/src/Package/Domain/Data/package_origin.php';
-        $array = EntityHelper::collectionToArray($repoCollection);
+        $array = CollectionHelper::toArray($repoCollection);
         $array = ArrayHelper::collectionExtractByKeys($array, ['id', 'name', 'group']);
 
         StoreHelper::save($fileName, $array);

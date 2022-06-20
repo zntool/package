@@ -4,6 +4,7 @@ namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
+use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,7 +30,7 @@ class GitBranchCheckoutToRootCommand extends BaseCommand
         $output->writeln('');
         $output->writeln('<fg=yellow>Total:</>');
         $output->writeln('');
-        $output->writeln('<fg=yellow>' . implode("\n", EntityHelper::getColumn($totalCollection, 'id')) . '</>');
+        $output->writeln('<fg=yellow>' . implode("\n", CollectionHelper::getColumn($totalCollection, 'id')) . '</>');
         $output->writeln('');
 
         return 0;
