@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Interfaces\Services;
 
-use ZnCore\Domain\Interfaces\Service\CrudServiceInterface;
+use ZnCore\Base\Libs\Service\Interfaces\CrudServiceInterface;
 
 interface PackageServiceInterface extends CrudServiceInterface
 {

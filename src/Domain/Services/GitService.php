@@ -5,7 +5,7 @@ namespace ZnTool\Package\Domain\Services;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
-use ZnCore\Domain\Base\BaseService;
+use ZnCore\Base\Libs\Service\Base\BaseService;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Entities\TagEntity;
