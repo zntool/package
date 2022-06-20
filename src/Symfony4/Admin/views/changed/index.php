@@ -11,7 +11,7 @@
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormView;
-use ZnCore\Domain\Libs\DataProvider;
+use ZnCore\Base\Libs\DataProvider\Libs\DataProvider;
 use ZnTool\Package\Domain\Entities\ApiKeyEntity;
 
 //dd($this->translate('core', 'action.send'));
