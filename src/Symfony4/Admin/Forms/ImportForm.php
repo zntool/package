@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use ZnCore\Base\Libs\I18Next\Facades\I18Next;
-use ZnCore\Domain\Interfaces\Entity\ValidateEntityByMetadataInterface;
+use ZnCore\Base\Libs\Entity\Interfaces\ValidateEntityByMetadataInterface;
 use ZnLib\Web\Symfony4\MicroApp\Interfaces\BuildFormInterface;
 use ZnTool\Package\Domain\Entities\UserEntity;
 use ZnTool\Package\Domain\Interfaces\Services\UserServiceInterface;
