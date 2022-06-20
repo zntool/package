@@ -4,19 +4,15 @@ namespace ZnTool\Package\Commands;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Collection;
-use Psr\Http\Message\ResponseInterface;
-use ZnCore\Base\Enums\Http\HttpMethodEnum;
-use ZnCore\Base\Helpers\LoadHelper;
-use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
-use ZnCore\Domain\Helpers\EntityHelper;
-use ZnTool\Package\Domain\Entities\ChangedEntity;
-use ZnTool\Package\Domain\Entities\GroupEntity;
-use ZnTool\Package\Domain\Entities\PackageEntity;
-use ZnTool\Package\Domain\Enums\StatusEnum;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZnCore\Base\Enums\Http\HttpMethodEnum;
+use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
+use ZnCore\Base\Libs\Store\Helpers\StoreHelper;
+use ZnCore\Domain\Helpers\EntityHelper;
+use ZnTool\Package\Domain\Entities\GroupEntity;
+use ZnTool\Package\Domain\Entities\PackageEntity;
 
 class GithubOrgsCommand extends BaseCommand
 {
@@ -33,7 +29,7 @@ class GithubOrgsCommand extends BaseCommand
         $orgs = ArrayHelper::getColumn($collection, 'login');
         $repoCollection = new Collection();
         foreach ($orgs as $orgName) {
-            if(strpos($orgName, 'zn') === 0) {
+            if (strpos($orgName, 'zn') === 0) {
                 $url = "https://api.github.com/orgs/{$orgName}/repos";
                 $output->writeln('getting packages from: ' . $orgName);
                 $repos = $this->sendRequest(HttpMethodEnum::GET, $url);
@@ -56,13 +52,15 @@ class GithubOrgsCommand extends BaseCommand
         $array = EntityHelper::collectionToArray($repoCollection);
         $array = ArrayHelper::collectionExtractByKeys($array, ['id', 'name', 'group']);
 
-        LoadHelper::saveConfig($fileName, $array);
+        StoreHelper::save($fileName, $array);
+//        LoadHelper::saveConfig($fileName, $array);
 
         $output->writeln('');
         return 0;
     }
 
-    public function sendRequest(string $method, string $url, array $options = []): array {
+    public function sendRequest(string $method, string $url, array $options = []): array
+    {
         $client = new Client();
         try {
             $response = $client->request($method, $url, $options);
