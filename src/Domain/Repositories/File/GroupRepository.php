@@ -4,7 +4,7 @@ namespace ZnTool\Package\Domain\Repositories\File;
 
 use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
-use ZnCore\Contract\Domain\Interfaces\Entities\EntityIdInterface;
+use ZnCore\Base\Libs\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Base\Libs\Repository\Interfaces\ReadRepositoryInterface;
 use ZnCore\Base\Libs\Query\Entities\Query;
 use ZnCore\Base\Libs\Store\StoreFile;
