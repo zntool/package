@@ -3,6 +3,7 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Enumerable;
 use ZnCore\Base\Libs\FileSystem\Helpers\FindFileHelper;
 use ZnCore\Base\Libs\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Base\Libs\Query\Entities\Query;
@@ -68,7 +69,7 @@ class PackageRepository implements PackageRepositoryInterface
         return $collection;
     }
 
-    public function all(Query $query = null)
+    public function all(Query $query = null): Enumerable
     {
         $vendorDir = realpath(self::VENDOR_DIR);
         /** @var GroupEntity[] $groupCollection */

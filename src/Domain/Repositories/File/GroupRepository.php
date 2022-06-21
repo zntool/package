@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
+use Illuminate\Support\Enumerable;
 use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
 use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
 use ZnCore\Base\Libs\Entity\Interfaces\EntityIdInterface;
@@ -20,7 +21,7 @@ class GroupRepository implements ReadRepositoryInterface
         $this->fileName = $fileName;
     }
 
-    public function all(Query $query = null)
+    public function all(Query $query = null): Enumerable
     {
         $store = new StoreFile($this->fileName);
         $array = $store->load();
