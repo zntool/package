@@ -3,11 +3,11 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use Illuminate\Support\Enumerable;
-use ZnCore\Base\Libs\Entity\Helpers\CollectionHelper;
-use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
-use ZnCore\Base\Libs\Entity\Interfaces\EntityIdInterface;
-use ZnCore\Base\Libs\Repository\Interfaces\ReadRepositoryInterface;
-use ZnCore\Base\Libs\Query\Entities\Query;
+use ZnCore\Domain\Entity\Helpers\CollectionHelper;
+use ZnCore\Domain\Entity\Helpers\EntityHelper;
+use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
+use ZnCore\Domain\Repository\Interfaces\ReadRepositoryInterface;
+use ZnCore\Domain\Query\Entities\Query;
 use ZnCore\Base\Libs\Store\StoreFile;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 

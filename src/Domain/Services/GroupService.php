@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Services;
 
-use ZnCore\Base\Libs\Service\Base\BaseCrudService;
+use ZnCore\Domain\Service\Base\BaseCrudService;
 use ZnTool\Package\Domain\Repositories\File\GroupRepository;
 
 class GroupService extends BaseCrudService

@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Entities;
 
-use ZnCore\Base\Libs\Entity\Interfaces\EntityIdInterface;
+use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 
 class GitEntity implements EntityIdInterface
 {

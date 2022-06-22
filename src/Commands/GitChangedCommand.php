@@ -3,7 +3,7 @@
 namespace ZnTool\Package\Commands;
 
 use Illuminate\Support\Collection;
-use ZnCore\Base\Libs\Entity\Helpers\EntityHelper;
+use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnLib\Console\Symfony4\Libs\Command;
 use ZnTool\Package\Domain\Entities\ChangedEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
