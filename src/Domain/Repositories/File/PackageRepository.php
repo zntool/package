@@ -4,7 +4,7 @@ namespace ZnTool\Package\Domain\Repositories\File;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Enumerable;
-use ZnCore\Base\Libs\FileSystem\Helpers\FindFileHelper;
+use ZnCore\Base\FileSystem\Helpers\FindFileHelper;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Query\Entities\Query;
 use ZnTool\Package\Domain\Entities\GroupEntity;

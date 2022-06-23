@@ -4,7 +4,7 @@ namespace ZnTool\Package\Domain\Services;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use ZnCore\Base\Libs\Arr\Helpers\ArrayHelper;
+use ZnCore\Base\Arr\Helpers\ArrayHelper;
 use ZnCore\Domain\Service\Base\BaseService;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;

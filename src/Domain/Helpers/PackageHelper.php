@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
-use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
+use ZnCore\Base\FileSystem\Helpers\FilePathHelper;
 
 class PackageHelper
 {
