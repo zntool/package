@@ -2,20 +2,10 @@
 
 namespace ZnTool\Package\Domain\Libs;
 
-use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
+use ZnCore\Base\Libs\Arr\Helpers\ArrayHelper;
 use ZnCore\Base\Libs\Store\StoreFile;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
 use ZnTool\Package\Domain\Entities\ConfigEntity;
 use ZnTool\Package\Domain\Helpers\ComposerConfigHelper;
-use ZnTool\Dev\Composer\Domain\Interfaces\Services\ConfigServiceInterface;
-use ZnTool\Package\Domain\Interfaces\Services\GitServiceInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 class Depend
 {
@@ -36,16 +26,17 @@ class Depend
         }
     }
 
-    private function getWanted($configEntity) {
+    private function getWanted($configEntity)
+    {
         $wantedResult = [];
         $requirePackage = $this->getRequiredFromPhpCode($configEntity);
-        if(!empty($requirePackage)) {
+        if (!empty($requirePackage)) {
             $deps[$configEntity->getId()] = $wantedResult;
         }
         $wanted = ComposerConfigHelper::getWanted($configEntity, $requirePackage);
         foreach ($wanted as $packageId) {
             $lastVersion = ArrayHelper::getValue($this->lastVersions, $packageId);
-            if(empty($lastVersion)) {
+            if (empty($lastVersion)) {
                 $lastVersion = ArrayHelper::getValue($this->installedVersions, $packageId);
             }
             $lastVersion = str_replace('.x-dev', '.*', $lastVersion);
@@ -59,10 +50,10 @@ class Depend
         $deps = [];
         foreach ($collection as $configEntity) {
             $wanted = $this->getWanted($configEntity);
-            if(!empty($wanted)) {
+            if (!empty($wanted)) {
                 $deps[$configEntity->getId()] = $wanted;
             }
-            if($callback != null) {
+            if ($callback != null) {
                 $callback();
             }
         }
@@ -77,18 +68,19 @@ class Depend
             $dep = $this->item($configEntity);
             $dep['wanted'] = ArrayHelper::getValue($allWanted, $configEntity->getId());
             $deps[$configEntity->getId()] = $dep;
-            if($callback != null) {
+            if ($callback != null) {
                 $callback();
             }
         }
         return $deps;
     }
 
-    private function getRequiredFromPhpCode(ConfigEntity $configEntity): array {
+    private function getRequiredFromPhpCode(ConfigEntity $configEntity): array
+    {
         $dir = $configEntity->getPackage()->getDirectory();
         $uses = ComposerConfigHelper::getUses($dir);
         $requirePackage = [];
-        if($uses) {
+        if ($uses) {
             foreach ($uses as $use) {
                 foreach ($this->namespacesPackages as $namespacesPackage => $packageEntity) {
                     if (mb_strpos($use, $namespacesPackage) === 0) {
@@ -102,22 +94,24 @@ class Depend
         return $requirePackage;
     }
 
-    private function getRequreUpdate(array $requires) {
+    private function getRequreUpdate(array $requires)
+    {
         $requireUpdate = [];
         foreach ($this->lastVersions as $packageId => $lastVersion) {
             $currentVersion = ArrayHelper::getValue($requires, $packageId);
-            if($currentVersion && $lastVersion && version_compare($currentVersion, $lastVersion, '<')) {
+            if ($currentVersion && $lastVersion && version_compare($currentVersion, $lastVersion, '<')) {
                 $requireUpdate[$packageId] = $lastVersion;
             }
         }
     }
 
-    private function item(ConfigEntity $configEntity) {
+    private function item(ConfigEntity $configEntity)
+    {
         //$dep['id'] = $configEntity->getId();
         $dep['all'] = $configEntity->getAllRequire();
 
         $requires = $configEntity->getAllRequire();
-        if($requires) {
+        if ($requires) {
             $dep['update'] = $this->getRequreUpdate($requires);
         }
 

@@ -7,8 +7,6 @@ use Illuminate\Support\Enumerable;
 use ZnCore\Base\Libs\FileSystem\Helpers\FindFileHelper;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Query\Entities\Query;
-use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
-use ZnCore\Base\Libs\Store\StoreFile;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositoryInterface;
@@ -40,7 +38,7 @@ class PackageRepository implements PackageRepositoryInterface
         $groupCollection = new Collection;
 
         foreach ($groups as $group) {
-            if(is_dir($vendorDir . '/' . $group)) {
+            if (is_dir($vendorDir . '/' . $group)) {
                 $groupEntity = new GroupEntity;
                 $groupEntity->name = $group;
                 $groupCollection->add($groupEntity);
@@ -90,7 +88,8 @@ class PackageRepository implements PackageRepositoryInterface
         return $collection;
     }
 
-    private function isComposerPackage(PackageEntity $packageEntity): bool {
+    private function isComposerPackage(PackageEntity $packageEntity): bool
+    {
         $composerConfigFile = $packageEntity->getDirectory() . '/composer.json';
         $isPackage = is_dir($packageEntity->getDirectory()) && is_file($composerConfigFile);
         return $isPackage;

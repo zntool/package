@@ -2,7 +2,6 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
-use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
 use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
 
 class PackageHelper
@@ -17,7 +16,7 @@ class PackageHelper
     public static function pathByNamespace($namespace)
     {
         $nsArray = PackageHelper::findPathByNamespace($namespace);
-        if($nsArray) {
+        if ($nsArray) {
             $partName = mb_substr($namespace, mb_strlen($nsArray['namespace']));
             $partName = trim($partName, '\\');
             $fileName = $nsArray['path'] . '\\' . $partName;

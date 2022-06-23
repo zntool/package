@@ -4,8 +4,8 @@ namespace ZnTool\Package\Domain\Libs;
 
 use Illuminate\Support\Arr;
 
-use ZnCore\Base\Legacy\Yii\Helpers\ArrayHelper;
-use ZnCore\Base\Legacy\Yii\Helpers\FileHelper;
+use ZnCore\Base\Libs\Arr\Helpers\ArrayHelper;
+use ZnCore\Base\Libs\FileSystem\Helpers\FileHelper;
 use ZnCore\Base\Libs\FileSystem\Helpers\FilePathHelper;
 use ZnCore\Base\Libs\Text\Helpers\TextHelper;
 use ZnLib\Console\Domain\Base\BaseShell;
