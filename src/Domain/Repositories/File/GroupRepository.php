@@ -8,7 +8,7 @@ use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Repository\Interfaces\ReadRepositoryInterface;
 use ZnCore\Domain\Query\Entities\Query;
-use ZnCore\Base\Store\StoreFile;
+use ZnLib\Components\Store\StoreFile;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 
 class GroupRepository implements ReadRepositoryInterface
