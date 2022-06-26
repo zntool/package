@@ -4,7 +4,7 @@ use ZnTool\Package\Symfony4\Admin\Controllers\ApplicationController;
 use ZnTool\Package\Symfony4\Admin\Controllers\EdsController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use ZnTool\Package\Symfony4\Admin\Controllers\ApiKeyController;
-use ZnLib\Web\Components\Controller\Helpers\RouteHelper;
+use ZnLib\Web\Controller\Helpers\RouteHelper;
 
 return function (RoutingConfigurator $routes) {
     $routes

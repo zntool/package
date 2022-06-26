@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @var $this \ZnLib\Web\Components\View\Libs\View
+ * @var $this \ZnLib\Web\View\Libs\View
  * @var $formView FormView|AbstractType[]
- * @var $formRender \ZnLib\Web\Components\Form\Libs\FormRender
+ * @var $formRender \ZnLib\Web\Form\Libs\FormRender
  * @var $dataProvider DataProvider
  * @var $baseUri string
  * @var $packageCollection \Illuminate\Support\Collection | \ZnSandbox\Sandbox\Bundle\Domain\Entities\BundleEntity[]
