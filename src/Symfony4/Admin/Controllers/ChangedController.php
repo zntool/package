@@ -9,7 +9,7 @@ use ZnCore\Domain\Entity\Helpers\CollectionHelper;
 use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnLib\Web\Symfony4\MicroApp\BaseWebController;
 use ZnLib\Web\Symfony4\MicroApp\Interfaces\ControllerAccessInterface;
-use ZnLib\Web\Symfony4\MicroApp\Libs\FormManager;
+use ZnLib\Web\Components\Form\Libs\FormManager;
 use ZnLib\Web\Symfony4\MicroApp\Libs\LayoutManager;
 use ZnTool\Package\Domain\Entities\FavoriteEntity;
 use ZnTool\Package\Domain\Helpers\FavoriteHelper;
