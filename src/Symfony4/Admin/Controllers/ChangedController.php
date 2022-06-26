@@ -10,7 +10,7 @@ use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnLib\Web\Symfony4\MicroApp\BaseWebController;
 use ZnLib\Web\Symfony4\MicroApp\Interfaces\ControllerAccessInterface;
 use ZnLib\Web\Components\Form\Libs\FormManager;
-use ZnLib\Web\Symfony4\MicroApp\Libs\LayoutManager;
+use ZnLib\Web\Components\Layout\Libs\LayoutManager;
 use ZnTool\Package\Domain\Entities\FavoriteEntity;
 use ZnTool\Package\Domain\Helpers\FavoriteHelper;
 use ZnTool\Package\Domain\Helpers\TableMapperHelper;

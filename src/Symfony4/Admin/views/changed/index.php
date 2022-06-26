@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $this \ZnLib\Web\View\View
+ * @var $this \ZnLib\Web\Components\View\Libs\View
  * @var $formView FormView|AbstractType[]
  * @var $formRender \ZnLib\Web\Components\Form\Libs\FormRender
  * @var $dataProvider DataProvider
