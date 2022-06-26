@@ -13,9 +13,9 @@ use ZnLib\Components\I18Next\Facades\I18Next;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 use ZnLib\Web\Components\Controller\Helpers\ActionHelper;
 use ZnLib\Web\Components\View\Libs\View;
-use ZnLib\Web\Components\Widget\Widgets\Detail\DetailWidget;
-use ZnLib\Web\Components\Widget\Widgets\Format\Formatters\ActionFormatter;
-use ZnLib\Web\Components\Widget\Widgets\Format\Formatters\LinkFormatter;
+use ZnLib\Web\Components\TwBootstrap\Widgets\Detail\DetailWidget;
+use ZnLib\Web\Components\TwBootstrap\Widgets\Format\Formatters\ActionFormatter;
+use ZnLib\Web\Components\TwBootstrap\Widgets\Format\Formatters\LinkFormatter;
 
 $attributes = [
     [
