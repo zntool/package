@@ -16,7 +16,7 @@ use ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositoryInterface;
 class PackageRepository implements PackageRepositoryInterface
 {
 
-    use FindOneTrait;
+//    use FindOneTrait;
 //    use FindAllTrait;
 
     const VENDOR_DIR = __DIR__ . '/../../../../../../';
@@ -105,10 +105,15 @@ class PackageRepository implements PackageRepositoryInterface
         return count($this->findAll($query));
     }
 
-    public function oneById($id, Query $query = null): EntityIdInterface
+    public function findOneById($id, Query $query = null): EntityIdInterface
     {
         // TODO: Implement oneById() method.
     }
+
+    /*public function oneById($id, Query $query = null): EntityIdInterface
+    {
+        // TODO: Implement oneById() method.
+    }*/
 
     /*public function _relations()
     {

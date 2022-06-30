@@ -16,7 +16,7 @@ use ZnTool\Package\Domain\Entities\GroupEntity;
 class GroupRepository implements ReadRepositoryInterface
 {
 
-    use FindOneTrait;
+//    use FindOneTrait;
 //    use FindAllTrait;
 
     private $fileName;
@@ -43,7 +43,7 @@ class GroupRepository implements ReadRepositoryInterface
         return $collection->count();
     }
 
-    public function oneById($id, Query $query = null): EntityIdInterface
+    public function findOneById($id, Query $query = null): EntityIdInterface
     {
         // TODO: Implement oneById() method.
     }
