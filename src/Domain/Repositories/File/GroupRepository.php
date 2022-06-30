@@ -45,7 +45,7 @@ class GroupRepository implements ReadRepositoryInterface
 
     public function findOneById($id, Query $query = null): EntityIdInterface
     {
-        // TODO: Implement oneById() method.
+        // TODO: Implement findOneById() method.
     }
 
     public function getEntityClass(): string
