@@ -71,7 +71,7 @@ class ChangedController extends BaseWebController implements ControllerAccessInt
 
     public function index(Request $request): Response
     {
-        //$bundleCollection = $this->->all();
+        //$bundleCollection = $this->->findAll();
         $packageCollection = $this->packageService->findAll();
         //dd($packageCollection);
         return $this->render('index', [
