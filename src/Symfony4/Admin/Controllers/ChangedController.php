@@ -72,7 +72,7 @@ class ChangedController extends BaseWebController implements ControllerAccessInt
     public function index(Request $request): Response
     {
         //$bundleCollection = $this->->all();
-        $packageCollection = $this->packageService->all();
+        $packageCollection = $this->packageService->findAll();
         //dd($packageCollection);
         return $this->render('index', [
             'packageCollection' => $packageCollection,
@@ -82,7 +82,7 @@ class ChangedController extends BaseWebController implements ControllerAccessInt
     public function view(Request $request): Response
     {
         $id = $request->query->get('id');
-        $bundleEntity = $this->bundleService->oneById($id);
+        $bundleEntity = $this->bundleService->findOneById($id);
 //dd($bundleEntity);
 
         if($bundleEntity->getDomain()) {

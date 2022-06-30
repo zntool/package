@@ -147,7 +147,7 @@ class RequestForm implements ValidationByMetadataInterface, BuildFormInterface
     public function getUserOptions(): array
     {
         /** @var UserEntity[] $collection */
-        $collection = $this->_userService->all();
+        $collection = $this->_userService->findAll();
         $options = [
             null => 'guest'
         ];
@@ -160,7 +160,7 @@ class RequestForm implements ValidationByMetadataInterface, BuildFormInterface
     public function getVersionOptions(): array
     {
         /** @var UserEntity[] $collection */
-        $collection = $this->_userService->all();
+        $collection = $this->_userService->findAll();
         $options = [];
         for ($i = 1; $i <= 3; $i++) {
             $options[$i] = "Version $i";

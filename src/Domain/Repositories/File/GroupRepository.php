@@ -17,7 +17,7 @@ class GroupRepository implements ReadRepositoryInterface
 {
 
     use FindOneTrait;
-    use FindAllTrait;
+//    use FindAllTrait;
 
     private $fileName;
 
@@ -26,7 +26,7 @@ class GroupRepository implements ReadRepositoryInterface
         $this->fileName = $fileName;
     }
 
-    public function all(Query $query = null): Enumerable
+    public function findAll(Query $query = null): Enumerable
     {
         $store = new StoreFile($this->fileName);
         $array = $store->load();
@@ -39,7 +39,7 @@ class GroupRepository implements ReadRepositoryInterface
 
     public function count(Query $query = null): int
     {
-        $collection = $this->all($query);
+        $collection = $this->findAll($query);
         return $collection->count();
     }
 

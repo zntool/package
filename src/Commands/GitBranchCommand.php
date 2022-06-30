@@ -16,7 +16,7 @@ class GitBranchCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('<fg=white># Packages git pull</>');
-        $collection = $this->packageService->all();
+        $collection = $this->packageService->findAll();
         $output->writeln('');
         if ($collection->count() == 0) {
             $output->writeln('<fg=magenta>Not found packages!</>');

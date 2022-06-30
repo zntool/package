@@ -18,11 +18,11 @@ class GitRepository implements GitRepositoryInterface
     const VENDOR_DIR = __DIR__ . '/../../../../../..';
 
     protected $tableName = '';
-    private $packageRepostory;
+    private $packageRepository;
 
-    public function __construct(PackageRepository $packageRepostory)
+    public function __construct(PackageRepository $packageRepository)
     {
-        $this->packageRepostory = $packageRepostory;
+        $this->packageRepository = $packageRepository;
     }
 
     public function getEntityClass(): string
@@ -42,7 +42,7 @@ class GitRepository implements GitRepositoryInterface
     public function allChanged()
     {
         /** @var PackageEntity[] $packageCollection */
-        $packageCollection = $this->packageRepostory->all();
+        $packageCollection = $this->packageRepository->findAll();
         $changedCollection = new Collection;
         foreach ($packageCollection as $packageEntity) {
             $hasChanges = $this->isHasChanges($packageEntity);

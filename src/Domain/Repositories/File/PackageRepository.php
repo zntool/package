@@ -17,16 +17,16 @@ class PackageRepository implements PackageRepositoryInterface
 {
 
     use FindOneTrait;
-    use FindAllTrait;
+//    use FindAllTrait;
 
     const VENDOR_DIR = __DIR__ . '/../../../../../../';
 
     protected $tableName = '';
-    private $groupRepostory;
+    private $groupRepository;
 
-    public function __construct(GroupRepository $groupRepostory)
+    public function __construct(GroupRepository $groupRepository)
     {
-        $this->groupRepostory = $groupRepostory;
+        $this->groupRepository = $groupRepository;
     }
 
     public function getEntityClass(): string
@@ -72,11 +72,11 @@ class PackageRepository implements PackageRepositoryInterface
         return $collection;
     }
 
-    public function all(Query $query = null): Enumerable
+    public function findAll(Query $query = null): Enumerable
     {
         $vendorDir = realpath(self::VENDOR_DIR);
         /** @var GroupEntity[] $groupCollection */
-        $groupCollection = $this->groupRepostory->all();
+        $groupCollection = $this->groupRepository->findAll();
         $collection = new Collection;
         foreach ($groupCollection as $groupEntity) {
             $dir = $vendorDir . DIRECTORY_SEPARATOR . $groupEntity->name;
@@ -102,7 +102,7 @@ class PackageRepository implements PackageRepositoryInterface
 
     public function count(Query $query = null): int
     {
-        return count($this->all($query));
+        return count($this->findAll($query));
     }
 
     public function oneById($id, Query $query = null): EntityIdInterface

@@ -27,7 +27,7 @@ class GitService extends BaseService implements GitServiceInterface
 
     public function lastVersionCollection(): array
     {
-        $collection = $this->packageService->all();
+        $collection = $this->packageService->findAll();
         /** @var PackageEntity[] | Collection $collection */
         $versionArray = [];
         foreach ($collection as $packageEntity) {
