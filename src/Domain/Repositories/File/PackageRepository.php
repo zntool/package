@@ -5,6 +5,8 @@ namespace ZnTool\Package\Domain\Repositories\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Enumerable;
 use ZnCore\Base\FileSystem\Helpers\FindFileHelper;
+use ZnCore\Domain\Domain\Traits\FindAllTrait;
+use ZnCore\Domain\Domain\Traits\FindOneTrait;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Query\Entities\Query;
 use ZnTool\Package\Domain\Entities\GroupEntity;
@@ -13,6 +15,9 @@ use ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositoryInterface;
 
 class PackageRepository implements PackageRepositoryInterface
 {
+
+    use FindOneTrait;
+    use FindAllTrait;
 
     const VENDOR_DIR = __DIR__ . '/../../../../../../';
 

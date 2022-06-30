@@ -3,6 +3,8 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use Illuminate\Support\Enumerable;
+use ZnCore\Domain\Domain\Traits\FindAllTrait;
+use ZnCore\Domain\Domain\Traits\FindOneTrait;
 use ZnCore\Domain\Entity\Helpers\CollectionHelper;
 use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
@@ -13,6 +15,9 @@ use ZnTool\Package\Domain\Entities\GroupEntity;
 
 class GroupRepository implements ReadRepositoryInterface
 {
+
+    use FindOneTrait;
+    use FindAllTrait;
 
     private $fileName;
 
