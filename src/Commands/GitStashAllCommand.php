@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Commands;
 
-use Illuminate\Support\Collection;
+use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnTool\Package\Domain\Entities\ChangedEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;

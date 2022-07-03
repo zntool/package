@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
-use Illuminate\Support\Collection;
+use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Base\Arr\Helpers\ArrayHelper;
 use ZnCore\Base\FileSystem\Helpers\FileHelper;
 use ZnCore\Base\FileSystem\Helpers\FileStorageHelper;

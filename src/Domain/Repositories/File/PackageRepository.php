@@ -2,8 +2,8 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Enumerable;
+use ZnCore\Domain\Collection\Libs\Collection;
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Base\FileSystem\Helpers\FindFileHelper;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Query\Entities\Query;

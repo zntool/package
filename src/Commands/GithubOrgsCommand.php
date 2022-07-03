@@ -4,7 +4,7 @@ namespace ZnTool\Package\Commands;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Collection;
+use ZnCore\Domain\Collection\Libs\Collection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnLib\Components\Http\Enums\HttpMethodEnum;

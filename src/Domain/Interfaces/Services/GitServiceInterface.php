@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Interfaces\Services;
 
-use Illuminate\Support\Collection;
+use ZnCore\Domain\Collection\Libs\Collection;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 
 interface GitServiceInterface

@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
-use Illuminate\Support\Enumerable;
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Entity\Helpers\CollectionHelper;
 use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Query\Entities\Query;

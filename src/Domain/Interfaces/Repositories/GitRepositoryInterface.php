@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Interfaces\Repositories;
 
-use Illuminate\Support\Collection;
+use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Domain\Domain\Interfaces\GetEntityClassInterface;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 

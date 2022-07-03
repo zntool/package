@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Commands;
 
-use Illuminate\Support\Collection;
+use ZnCore\Domain\Collection\Libs\Collection;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
