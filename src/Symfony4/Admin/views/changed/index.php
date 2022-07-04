@@ -6,7 +6,7 @@
  * @var $formRender \ZnLib\Web\Form\Libs\FormRender
  * @var $dataProvider DataProvider
  * @var $baseUri string
- * @var $packageCollection \ZnCore\Domain\Collection\Libs\Collection | \ZnSandbox\Sandbox\Bundle\Domain\Entities\BundleEntity[]
+ * @var $packageCollection \ZnCore\Domain\Collection\Interfaces\Enumerable | \ZnSandbox\Sandbox\Bundle\Domain\Entities\BundleEntity[]
  */
 
 use Symfony\Component\Form\AbstractType;
