@@ -85,9 +85,9 @@ class GitNeedReleaseCommand extends BaseCommand
         return $totalCollection;
     }
 
-    private function displayTotal(Collection $totalCollection, InputInterface $input, OutputInterface $output, array $choices)
+    private function displayTotal(Enumerable $totalCollection, InputInterface $input, OutputInterface $output, array $choices)
     {
-        /** @var PackageEntity[] | Collection $totalCollection */
+        /** @var PackageEntity[] | Enumerable $totalCollection */
         $output->writeln('<fg=yellow>Need release!</>');
         $output->writeln('');
 

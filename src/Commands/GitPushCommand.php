@@ -89,9 +89,9 @@ class GitPushCommand extends BaseCommand
         return $totalCollection;
     }
 
-    private function displayTotal(Collection $totalCollection, InputInterface $input, OutputInterface $output)
+    private function displayTotal(Enumerable $totalCollection, InputInterface $input, OutputInterface $output)
     {
-        /** @var PackageEntity[] | Collection $totalCollection */
+        /** @var PackageEntity[] | Enumerable $totalCollection */
         $output->writeln('<fg=yellow>Updated packages!</>');
         $output->writeln('');
         foreach ($totalCollection as $packageEntity) {

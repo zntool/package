@@ -75,9 +75,9 @@ class GitStashAllCommand extends BaseCommand
         return preg_match('/^([a-z\d]+[-_]?)*[a-z\d]$/i', $branchName);
     }
 
-    private function displayTotal(Collection $totalCollection, InputInterface $input, OutputInterface $output)
+    private function displayTotal(Enumerable $totalCollection, InputInterface $input, OutputInterface $output)
     {
-        /** @var ChangedEntity[] | Collection $totalCollection */
+        /** @var ChangedEntity[] | Enumerable $totalCollection */
         $output->writeln('<fg=yellow>Has changes:</>');
         $output->writeln('');
 

@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Base\Arr\Helpers\ArrayHelper;
 use ZnCore\Base\FileSystem\Helpers\FileHelper;
@@ -46,9 +47,9 @@ class ComposerConfigHelper
         return $depss;
     }
 
-    public static function extractPsr4Autoload(Collection $collection)
+    public static function extractPsr4Autoload(Enumerable $collection)
     {
-        /** @var ConfigEntity[] | Collection $collection */
+        /** @var ConfigEntity[] | Enumerable $collection */
         $namespaces = [];
         foreach ($collection as $configEntity) {
             $psr4autoloads = $configEntity->getAllAutoloadPsr4();
@@ -66,9 +67,9 @@ class ComposerConfigHelper
         return $namespaces;
     }
 
-    public static function extractPsr4AutoloadPackages(Collection $collection)
+    public static function extractPsr4AutoloadPackages(Enumerable $collection)
     {
-        /** @var ConfigEntity[] | Collection $collection */
+        /** @var ConfigEntity[] | Enumerable $collection */
         $namespaces = [];
         foreach ($collection as $configEntity) {
             $psr4autoloads = $configEntity->getAllAutoloadPsr4();
