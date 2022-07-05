@@ -2,15 +2,13 @@
 
 namespace ZnTool\Package\Commands;
 
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Base\Arr\Helpers\ArrayHelper;
-use ZnCore\Domain\Entity\Helpers\CollectionHelper;
-use ZnCore\Domain\Entity\Helpers\EntityHelper;
-use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
-use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
+use ZnCore\Domain\Collection\Libs\Collection;
+use ZnCore\Domain\Entity\Helpers\CollectionHelper;
+use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
+use ZnTool\Package\Domain\Entities\PackageEntity;
 
 class GitPushCommand extends BaseCommand
 {
@@ -29,7 +27,7 @@ class GitPushCommand extends BaseCommand
         }
         $totalCollection = $this->displayProgress($collection, $input, $output);
 
-        if($totalCollection->isEmpty()) {
+        if ($totalCollection->isEmpty()) {
             $output->writeln('');
             $output->writeln('<fg=yellow>No changes</>');
             $output->writeln('');
@@ -71,13 +69,13 @@ class GitPushCommand extends BaseCommand
             $status = $this->gitService->status($packageEntity);
             $flags = $status['flags'];
 
-            if($flags['needPush'] || $flags['needCommit']) {
+            if ($flags['needPush'] || $flags['needCommit']) {
                 $actions = [];
-                if($flags['needPush']) {
+                if ($flags['needPush']) {
                     $actions[] = "<fg=yellow>PUSH {$status['push']['aheadCommitCount']}</>";
                     $totalCollection->add($packageEntity);
                 }
-                if($flags['needCommit']) {
+                if ($flags['needCommit']) {
                     $actions[] = "<fg=yellow>MODIFY</>";
                 }
                 $output->write(implode(' <fg=white>|</> ', $actions));

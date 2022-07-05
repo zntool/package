@@ -2,18 +2,13 @@
 
 namespace ZnTool\Package\Commands;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Domain\Entity\Helpers\CollectionHelper;
-use ZnCore\Domain\Entity\Helpers\EntityHelper;
-use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnLib\Console\Symfony4\Style\SymfonyStyle;
-use ZnSandbox\Sandbox\Bundle\Domain\Entities\BundleEntity;
-use ZnSandbox\Sandbox\Bundle\Domain\Entities\DomainEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use ZnTool\Package\Domain\Enums\StatusEnum;
 use ZnTool\Package\Domain\Helpers\VersionHelper;
 
 class GitNeedReleaseCommand extends BaseCommand
@@ -50,7 +45,7 @@ class GitNeedReleaseCommand extends BaseCommand
         return 0;
     }
 
-    private function selectPackages(InputInterface $input, OutputInterface $output, Collection $collection)//: DomainEntity
+    private function selectPackages(InputInterface $input, OutputInterface $output, Enumerable $collection)//: DomainEntity
     {
         $packageNames = CollectionHelper::getColumn($collection, 'id');
         $io = new SymfonyStyle($input, $output);
@@ -94,8 +89,7 @@ class GitNeedReleaseCommand extends BaseCommand
         $fastCommands = [];
         foreach ($totalCollection as $packageEntity) {
             $packageId = $packageEntity->getId();
-            if(in_array($packageId, $choices)) {
-
+            if (in_array($packageId, $choices)) {
 
 
                 $lastVersion = $this->gitService->lastVersion($packageEntity);

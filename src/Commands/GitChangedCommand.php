@@ -2,15 +2,13 @@
 
 namespace ZnTool\Package\Commands;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Domain\Entity\Helpers\EntityHelper;
-use ZnLib\Console\Symfony4\Libs\Command;
 use ZnTool\Package\Domain\Entities\ChangedEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Enums\StatusEnum;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class GitChangedCommand extends BaseCommand
 {
@@ -52,7 +50,7 @@ class GitChangedCommand extends BaseCommand
             $isGit = is_file($packageEntity->getDirectory() . '/.git/config');
             $changedEntity = new ChangedEntity;
             $changedEntity->setPackage($packageEntity);
-            if( ! $isGit) {
+            if (!$isGit) {
                 $output->writeln("<fg=magenta>Not found git repository</>");
                 $changedEntity->setStatus(StatusEnum::NOT_FOUND_REPO);
                 $totalCollection->add($changedEntity);
@@ -72,7 +70,8 @@ class GitChangedCommand extends BaseCommand
         return $totalCollection;
     }
 
-    private function isBranch(string $branchName): bool {
+    private function isBranch(string $branchName): bool
+    {
         return preg_match('/^([a-z\d]+[-_]?)*[a-z\d]$/i', $branchName) || preg_match('/^\d+.+x$/i', $branchName);
     }
 
@@ -83,7 +82,7 @@ class GitChangedCommand extends BaseCommand
         $output->writeln('');
 
         $targetVersion = $_ENV['ZN_VERSION'] ?? '0.x';
-        
+
         $fastCommands = [];
         foreach ($totalCollection as $changedEntity) {
             $packageEntity = $changedEntity->getPackage();
@@ -91,16 +90,16 @@ class GitChangedCommand extends BaseCommand
             $vendorDir = __DIR__ . '/../../../../';
             $dir = realpath($vendorDir) . '/' . $packageId;
             $orgDir = realpath($vendorDir) . '/' . $packageEntity->getGroup()->name;
-            if($changedEntity->getStatus() == StatusEnum::CHANGED) {
+            if ($changedEntity->getStatus() == StatusEnum::CHANGED) {
                 $fastCommands[] = "cd $dir && git add . && git commit -m upd && git pull && git push";
                 $output->writeln("<fg=yellow> {$packageId}</>");
-            /*} elseif ($changedEntity->getStatus() == StatusEnum::SELECT_BRANCH) {
-                $rootBranch = $this->gitService->getRootBranch($packageEntity);
-                $command = [];
-                $command[] = "cd $dir";
-                $command[] = "git pull";
-                $fastCommands[] = implode(' && ', $command);
-                $output->writeln("<fg=yellow> {$packageId}</>");*/
+                /*} elseif ($changedEntity->getStatus() == StatusEnum::SELECT_BRANCH) {
+                    $rootBranch = $this->gitService->getRootBranch($packageEntity);
+                    $command = [];
+                    $command[] = "cd $dir";
+                    $command[] = "git pull";
+                    $fastCommands[] = implode(' && ', $command);
+                    $output->writeln("<fg=yellow> {$packageId}</>");*/
 
                 /*$cmd = new Command();
                 $cmd
@@ -115,7 +114,7 @@ class GitChangedCommand extends BaseCommand
                 $output->writeln("<fg=magenta> {$packageId}</>");
             }
         }
-        
+
         $output->writeln('');
         $output->writeln('<fg=yellow>Fast command:</>');
         $output->writeln('');

@@ -3,7 +3,6 @@
 namespace ZnTool\Package\Domain\Interfaces\Repositories;
 
 use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Domain\Domain\Interfaces\GetEntityClassInterface;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 

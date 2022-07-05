@@ -2,14 +2,13 @@
 
 namespace ZnTool\Package\Commands;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnTool\Package\Domain\Entities\ChangedEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Enums\StatusEnum;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class GitStashAllCommand extends BaseCommand
 {
@@ -51,7 +50,7 @@ class GitStashAllCommand extends BaseCommand
             $isGit = is_file($packageEntity->getDirectory() . '/.git/config');
             $changedEntity = new ChangedEntity;
             $changedEntity->setPackage($packageEntity);
-            if( ! $isGit) {
+            if (!$isGit) {
                 $output->writeln("<fg=magenta>Not found git repository</>");
                 $changedEntity->setStatus(StatusEnum::NOT_FOUND_REPO);
                 $totalCollection->add($changedEntity);
@@ -71,7 +70,8 @@ class GitStashAllCommand extends BaseCommand
         return $totalCollection;
     }
 
-    private function isBranch(string $branchName): bool {
+    private function isBranch(string $branchName): bool
+    {
         return preg_match('/^([a-z\d]+[-_]?)*[a-z\d]$/i', $branchName);
     }
 
@@ -88,14 +88,14 @@ class GitStashAllCommand extends BaseCommand
             $vendorDir = __DIR__ . '/../../../../';
             $dir = realpath($vendorDir) . '/' . $packageId;
             $orgDir = realpath($vendorDir) . '/' . $packageEntity->getGroup()->name;
-            if($changedEntity->getStatus() == StatusEnum::CHANGED) {
+            if ($changedEntity->getStatus() == StatusEnum::CHANGED) {
                 $fastCommands[] = "cd $dir && git add . && git stash";
                 $output->writeln("<fg=yellow> {$packageId}</>");
             } elseif ($changedEntity->getStatus() == StatusEnum::SELECT_BRANCH) {
                 $branches = $this->gitService->branches($changedEntity->getPackage());
                 $branchNames = [];
                 foreach ($changedEntity->getBranches() as $branchName) {
-                    if($this->isBranch($branchName)) {
+                    if ($this->isBranch($branchName)) {
                         $branchNames[] = $branchName;
                     }
                 }
@@ -108,11 +108,11 @@ class GitStashAllCommand extends BaseCommand
                 $output->writeln("<fg=magenta> {$packageId}</>");
             }
         }
-        
+
         $output->writeln('');
         $output->writeln('<fg=yellow>Fast command:</>');
         $output->writeln('');
-        
+
         foreach ($fastCommands as $fastCommand) {
             $output->writeln($fastCommand);
         }

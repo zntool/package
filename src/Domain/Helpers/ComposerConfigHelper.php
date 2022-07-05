@@ -2,13 +2,10 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Base\Arr\Helpers\ArrayHelper;
 use ZnCore\Base\FileSystem\Helpers\FileHelper;
 use ZnCore\Base\FileSystem\Helpers\FileStorageHelper;
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnTool\Package\Domain\Entities\ConfigEntity;
-use ZnTool\Package\Domain\Entities\PackageEntity;
 
 class ComposerConfigHelper
 {
@@ -16,11 +13,11 @@ class ComposerConfigHelper
     public static function getWanted(ConfigEntity $configEntity, $requirePackage)
     {
         $wanted = [];
-        if(!empty($requirePackage)) {
+        if (!empty($requirePackage)) {
             foreach ($requirePackage as $packageId) {
                 $allRequire = $configEntity->getAllRequire();
                 $isDeclared = isset($allRequire[$packageId]);
-                if( ! $isDeclared) {
+                if (!$isDeclared) {
                     $wanted[] = $packageId;
                 }
             }
@@ -38,7 +35,7 @@ class ComposerConfigHelper
         foreach ($phpScripts as $phpScriptFileName) {
             $code = FileStorageHelper::load($phpScriptFileName);
             preg_match_all('#use\s+(.+);#iu', $code, $matches);
-            if(!empty($matches[1])) {
+            if (!empty($matches[1])) {
                 $depss = array_merge($depss, $matches[1]);
             }
         }
@@ -53,7 +50,7 @@ class ComposerConfigHelper
         $namespaces = [];
         foreach ($collection as $configEntity) {
             $psr4autoloads = $configEntity->getAllAutoloadPsr4();
-            if($psr4autoloads) {
+            if ($psr4autoloads) {
                 foreach ($psr4autoloads as $autoloadNamespace => $path) {
                     $autoloadNamespace = trim($autoloadNamespace, '\\');
                     $path = 'vendor' . DIRECTORY_SEPARATOR . $configEntity->getPackage()->getId() . DIRECTORY_SEPARATOR . $path;
@@ -73,7 +70,7 @@ class ComposerConfigHelper
         $namespaces = [];
         foreach ($collection as $configEntity) {
             $psr4autoloads = $configEntity->getAllAutoloadPsr4();
-            if($psr4autoloads) {
+            if ($psr4autoloads) {
                 foreach ($psr4autoloads as $autoloadNamespace => $path) {
                     $autoloadNamespace = trim($autoloadNamespace, '\\');
                     $namespaces[$autoloadNamespace] = $configEntity->getPackage();

@@ -3,8 +3,8 @@
 namespace ZnTool\Package\Domain\Services;
 
 //use Illuminate\Support\Arr;
-use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Base\Arr\Helpers\ArrayHelper;
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Service\Base\BaseService;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
@@ -28,7 +28,7 @@ class GitService extends BaseService implements GitServiceInterface
     public function lastVersionCollection(): array
     {
         $collection = $this->packageService->findAll();
-        /** @var PackageEntity[] | Collection $collection */
+        /** @var PackageEntity[] | Enumerable $collection */
         $versionArray = [];
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();
@@ -101,10 +101,11 @@ class GitService extends BaseService implements GitServiceInterface
         return $result;
     }
 
-    protected function prepareBranches(array $branches): array {
+    protected function prepareBranches(array $branches): array
+    {
         foreach ($branches as $i => &$branchItem) {
             $branchItem = str_replace('remotes/origin/', '', $branchItem);
-            if(strpos($branchItem, 'HEAD ->') !== false) {
+            if (strpos($branchItem, 'HEAD ->') !== false) {
                 unset($branches[$i]);
             }
         }
@@ -139,39 +140,39 @@ class GitService extends BaseService implements GitServiceInterface
             'rawLines' => $status,
         ];
 
-        if($matches = $git->matchText($status, 'On branch ([\S]+)')) {
+        if ($matches = $git->matchText($status, 'On branch ([\S]+)')) {
             $info['branch'] = $matches[0][1];
         }
 
         //'Your branch is ahead of \'origin/(.+)\' by (\d+) commit'
 
-        if($matches = $git->matchText($status, 'Your branch is ahead of \'origin\/(.+)\' by (\d+) commit')) {
+        if ($matches = $git->matchText($status, 'Your branch is ahead of \'origin\/(.+)\' by (\d+) commit')) {
             $info['push']['isUpToDateWith'] = $matches[0][1];
             $info['push']['aheadCommitCount'] = $matches[0][2];
             $info['flags']['needPush'] = true;
-        } elseif($matches = $git->matchText($status, 'Your branch is up to date with \'origin\/(.+)\'\.')) {
+        } elseif ($matches = $git->matchText($status, 'Your branch is up to date with \'origin\/(.+)\'\.')) {
             $info['push']['isUpToDateWith'] = $matches[0][1];
             $info['push']['aheadCommitCount'] = '?';
             $info['flags']['needPush'] = $matches[0][1] != $info['branch'];
         }
 
-        if($matches = $git->matchText($status, 'Untracked files:')) {
+        if ($matches = $git->matchText($status, 'Untracked files:')) {
             $info['flags']['hasUntracked'] = true;
         }
 
-        if($matches = $git->matchText($status, 'Changes not staged for commit:')) {
+        if ($matches = $git->matchText($status, 'Changes not staged for commit:')) {
             $matches2 = $git->matchTextAll($status, '(modified|deleted):\s+(.+)');
-            $hasModified  = false;
+            $hasModified = false;
             foreach ($matches2 as $item) {
                 $action = $item[1][0];
                 $file = $item[2][0];
                 $info[$action][] = $file;
-                $hasModified  = true;
+                $hasModified = true;
             }
             $info['flags']['hasModified'] = $hasModified;
         }
 
-        if($git->searchText2($status, 'nothing to commit, working tree clean')) {
+        if ($git->searchText2($status, 'nothing to commit, working tree clean')) {
             $info['flags']['needCommit'] = false;
         } else {
             $info['flags']['needCommit'] = $info['flags']['hasUntracked'] || $info['flags']['hasModified'];
@@ -236,7 +237,7 @@ class GitService extends BaseService implements GitServiceInterface
     {
         $git = new GitShell($packageEntity->getDirectory());
 
-        if(!$remote) {
+        if (!$remote) {
             $remote = $this->branch($packageEntity);
         }
         $result = $git->pushWithInfo("--set-upstream origin $remote");
@@ -264,7 +265,7 @@ class GitService extends BaseService implements GitServiceInterface
     {
         $isHas = $this->getRepository()->isHasChanges($packageEntity);
 //        dd($packageEntity->getId());
-        if($packageEntity->getName() == 'messenger') {
+        if ($packageEntity->getName() == 'messenger') {
             //dd($isHas);
         }
 

@@ -2,14 +2,12 @@
 
 namespace ZnTool\Package\Commands;
 
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Base\Arr\Helpers\ArrayHelper;
-use ZnCore\Domain\Entity\Helpers\CollectionHelper;
-use ZnCore\Domain\Entity\Helpers\EntityHelper;
-use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
+use ZnCore\Domain\Collection\Libs\Collection;
+use ZnCore\Domain\Entity\Helpers\CollectionHelper;
+use ZnTool\Package\Domain\Entities\PackageEntity;
 
 class GitBranchCheckoutToRootCommand extends BaseCommand
 {
@@ -39,8 +37,8 @@ class GitBranchCheckoutToRootCommand extends BaseCommand
 
     private function displayProgress(Enumerable $collection, InputInterface $input, OutputInterface $output): Enumerable
     {
-        /** @var PackageEntity[] | Collection $collection */
-        /** @var PackageEntity[] | Collection $totalCollection */
+        /** @var PackageEntity[] | Enumerable $collection */
+        /** @var PackageEntity[] | Enumerable $totalCollection */
         $totalCollection = new Collection;
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();
@@ -48,7 +46,7 @@ class GitBranchCheckoutToRootCommand extends BaseCommand
             $branches = $this->gitService->branches($packageEntity);
             $branch = $this->gitService->branch($packageEntity);
             $rootBranch = $this->gitService->getRootBranch($packageEntity);
-            if($branch == $rootBranch) {
+            if ($branch == $rootBranch) {
 
             } else {
                 $output->write(" checkout $rootBranch ... ");

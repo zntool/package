@@ -2,12 +2,11 @@
 
 namespace ZnTool\Package\Commands;
 
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
+use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Domain\Entity\Helpers\CollectionHelper;
-use ZnCore\Domain\Entity\Helpers\EntityHelper;
 use ZnLib\Console\Symfony4\Libs\Command;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
@@ -52,8 +51,8 @@ class GitBranchByVersionCommand extends BaseCommand
 
     private function displayProgress(Enumerable $collection, InputInterface $input, OutputInterface $output): Enumerable
     {
-        /** @var PackageEntity[] | Collection $collection */
-        /** @var PackageEntity[] | Collection $totalCollection */
+        /** @var PackageEntity[] | Enumerable $collection */
+        /** @var PackageEntity[] | Enumerable $totalCollection */
         $totalCollection = new Collection;
 
         $targetVersion = $_ENV['ZN_VERSION'] ?? '0.x';
@@ -134,7 +133,7 @@ class GitBranchByVersionCommand extends BaseCommand
 
         foreach ($totalCollection as $packageEntity) {
             $packageId = $packageEntity->getId();
-            if(in_array($packageId, $selectedPackages)) {
+            if (in_array($packageId, $selectedPackages)) {
 
                 $output->writeln("");
                 $output->writeln("<fg=white>$packageId");
@@ -143,15 +142,15 @@ class GitBranchByVersionCommand extends BaseCommand
                 $currentBranch = $this->gitService->branch($packageEntity);
                 $hasVersionBranch = $this->gitService->isHasBranch($packageEntity, $targetVersion);
 
-                if($currentBranch != $targetVersion) {
-                    if(!$hasVersionBranch) {
+                if ($currentBranch != $targetVersion) {
+                    if (!$hasVersionBranch) {
                         $output->write("  fetch $targetVersion ... ");
                         try {
                             $ee = @$this->gitService->fetch($packageEntity, $targetVersion);
                         } catch (\Throwable $e) {
                             $ee = false;
                         }
-                        if($ee) {
+                        if ($ee) {
                             $output->writeln("  <fg=green>OK</>");
                         } else {
                             $output->writeln("  <fg=yellow>Not found in remote</>");
@@ -167,7 +166,7 @@ class GitBranchByVersionCommand extends BaseCommand
                     $this->gitService->checkout($packageEntity, $targetVersion);
                     $output->writeln("<fg=green>OK</>");
                 } else {
-                    if($currentBranch != $rootBranch) {
+                    if ($currentBranch != $rootBranch) {
                         $output->write("  checkout $rootBranch ... ");
                         $this->gitService->checkout($packageEntity, $rootBranch);
                         $output->writeln("<fg=green>OK</>");
@@ -208,7 +207,7 @@ class GitBranchByVersionCommand extends BaseCommand
 
         }
 
-        if($fastCommands) {
+        if ($fastCommands) {
             $output->writeln('');
             $output->writeln('<fg=yellow>Fast command:</>');
             $output->writeln('');
