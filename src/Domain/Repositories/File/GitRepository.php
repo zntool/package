@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Domain\Entity\Helpers\CollectionHelper;
 use ZnCore\Domain\Entity\Helpers\EntityHelper;
@@ -72,7 +73,7 @@ class GitRepository implements GitRepositoryInterface
         }
     }
 
-    public function allCommit(PackageEntity $packageEntity): Collection
+    public function allCommit(PackageEntity $packageEntity): Enumerable
     {
         $git = new GitShell($packageEntity->getDirectory());
         $commits = $git->getCommits();
@@ -87,7 +88,7 @@ class GitRepository implements GitRepositoryInterface
         return $commitCollection;
     }
 
-    public function allTag(PackageEntity $packageEntity): Collection
+    public function allTag(PackageEntity $packageEntity): Enumerable
     {
         $git = new GitShell($packageEntity->getDirectory());
         $tags = $git->getTagsSha();

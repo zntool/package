@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Commands;
 
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,7 +38,7 @@ class GitBranchByVersionCommand extends BaseCommand
         return 0;
     }
 
-    private function hasChanges(Collection $collection): Collection
+    private function hasChanges(Enumerable $collection): Enumerable
     {
         $totalCollection = new Collection;
         foreach ($collection as $packageEntity) {
@@ -49,7 +50,7 @@ class GitBranchByVersionCommand extends BaseCommand
         return $totalCollection;
     }
 
-    private function displayProgress(Collection $collection, InputInterface $input, OutputInterface $output): Collection
+    private function displayProgress(Enumerable $collection, InputInterface $input, OutputInterface $output): Enumerable
     {
         /** @var PackageEntity[] | Collection $collection */
         /** @var PackageEntity[] | Collection $totalCollection */

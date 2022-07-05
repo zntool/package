@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Commands;
 
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,10 +35,10 @@ class GitPullCommand extends BaseCommand
         return 0;
     }
 
-    private function displayProgress(Collection $collection, InputInterface $input, OutputInterface $output): Collection
+    private function displayProgress(Enumerable $collection, InputInterface $input, OutputInterface $output): Enumerable
     {
-        /** @var PackageEntity[] | Collection $collection */
-        /** @var PackageEntity[] | Collection $totalCollection */
+        /** @var PackageEntity[] | Enumerable $collection */
+        /** @var PackageEntity[] | Enumerable $totalCollection */
         $totalCollection = new Collection;
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();

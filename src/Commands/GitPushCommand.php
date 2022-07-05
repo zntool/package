@@ -2,6 +2,7 @@
 
 namespace ZnTool\Package\Commands;
 
+use ZnCore\Domain\Collection\Interfaces\Enumerable;
 use ZnCore\Domain\Collection\Libs\Collection;
 use ZnCore\Base\Arr\Helpers\ArrayHelper;
 use ZnCore\Domain\Entity\Helpers\CollectionHelper;
@@ -59,10 +60,10 @@ class GitPushCommand extends BaseCommand
         return 0;
     }
 
-    private function displayProgress(Collection $collection, InputInterface $input, OutputInterface $output): Collection
+    private function displayProgress(Enumerable $collection, InputInterface $input, OutputInterface $output): Enumerable
     {
-        /** @var PackageEntity[] | Collection $collection */
-        /** @var PackageEntity[] | Collection $totalCollection */
+        /** @var PackageEntity[] | Enumerable $collection */
+        /** @var PackageEntity[] | Enumerable $totalCollection */
         $totalCollection = new Collection;
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();
