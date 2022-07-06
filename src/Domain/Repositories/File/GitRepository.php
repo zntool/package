@@ -43,7 +43,7 @@ class GitRepository implements GitRepositoryInterface
     {
         /** @var PackageEntity[] $packageCollection */
         $packageCollection = $this->packageRepository->findAll();
-        $changedCollection = new Collection;
+        $changedCollection = new Collection();
         foreach ($packageCollection as $packageEntity) {
             $hasChanges = $this->isHasChanges($packageEntity);
             if ($hasChanges) {

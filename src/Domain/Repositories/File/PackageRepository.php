@@ -35,7 +35,7 @@ class PackageRepository implements PackageRepositoryInterface
 
         $groups = FindFileHelper::scanDir($vendorDir);
         /** @var GroupEntity[] $groupCollection */
-        $groupCollection = new Collection;
+        $groupCollection = new Collection();
 
         foreach ($groups as $group) {
             if (is_dir($vendorDir . '/' . $group)) {
@@ -45,7 +45,7 @@ class PackageRepository implements PackageRepositoryInterface
             }
         }
 
-        $collection = new Collection;
+        $collection = new Collection();
         foreach ($groupCollection as $groupEntity) {
             $dir = $vendorDir . DIRECTORY_SEPARATOR . $groupEntity->name;
 
@@ -72,7 +72,7 @@ class PackageRepository implements PackageRepositoryInterface
         $vendorDir = realpath(self::VENDOR_DIR);
         /** @var GroupEntity[] $groupCollection */
         $groupCollection = $this->groupRepository->findAll();
-        $collection = new Collection;
+        $collection = new Collection();
         foreach ($groupCollection as $groupEntity) {
             $dir = $vendorDir . DIRECTORY_SEPARATOR . $groupEntity->name;
             $names = FindFileHelper::scanDir($dir);

@@ -39,7 +39,7 @@ class GitBranchByVersionCommand extends BaseCommand
 
     private function hasChanges(Enumerable $collection): Enumerable
     {
-        $totalCollection = new Collection;
+        $totalCollection = new Collection();
         foreach ($collection as $packageEntity) {
             $hasChanges = $this->gitService->isHasChanges($packageEntity);
             if ($hasChanges) {
@@ -53,7 +53,7 @@ class GitBranchByVersionCommand extends BaseCommand
     {
         /** @var PackageEntity[] | Enumerable $collection */
         /** @var PackageEntity[] | Enumerable $totalCollection */
-        $totalCollection = new Collection;
+        $totalCollection = new Collection();
 
         $targetVersion = $_ENV['ZN_VERSION'] ?? '0.x';
 

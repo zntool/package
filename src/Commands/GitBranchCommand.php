@@ -32,7 +32,7 @@ class GitBranchCommand extends BaseCommand
     {
         /** @var PackageEntity[] | Enumerable $collection */
         /** @var PackageEntity[] | Enumerable $totalCollection */
-        $totalCollection = new Collection;
+        $totalCollection = new Collection();
         foreach ($collection as $packageEntity) {
             $packageId = $packageEntity->getId();
             $output->write(" $packageId ... ");
