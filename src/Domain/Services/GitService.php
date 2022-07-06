@@ -3,9 +3,9 @@
 namespace ZnTool\Package\Domain\Services;
 
 //use Illuminate\Support\Arr;
-use ZnCore\Base\Arr\Helpers\ArrayHelper;
+use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Service\Base\BaseService;
+use ZnCore\Service\Base\BaseService;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Entities\TagEntity;

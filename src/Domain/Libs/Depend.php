@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Libs;
 
-use ZnCore\Base\Arr\Helpers\ArrayHelper;
+use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnLib\Components\Store\StoreFile;
 use ZnTool\Package\Domain\Entities\ConfigEntity;
 use ZnTool\Package\Domain\Helpers\ComposerConfigHelper;

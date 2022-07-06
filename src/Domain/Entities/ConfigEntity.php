@@ -4,7 +4,7 @@ namespace ZnTool\Package\Domain\Entities;
 
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use ZnCore\Entity\Interfaces\EntityIdInterface;
-use ZnCore\Base\Arr\Helpers\ArrayHelper;
+use ZnCore\Arr\Helpers\ArrayHelper;
 use Symfony\Component\Validator\Constraints as Assert;
 use ZnCore\Validation\Interfaces\ValidationByMetadataInterface;
 

@@ -6,7 +6,7 @@ use ZnCore\FileSystem\Helpers\FindFileHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Collection\Libs\Collection;
 use ZnCore\Entity\Interfaces\EntityIdInterface;
-use ZnCore\Domain\Query\Entities\Query;
+use ZnCore\Query\Entities\Query;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositoryInterface;
