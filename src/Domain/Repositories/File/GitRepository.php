@@ -2,9 +2,9 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Domain\Entity\Helpers\CollectionHelper;
+use ZnCore\Collection\Interfaces\Enumerable;
+use ZnCore\Collection\Libs\Collection;
+use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\GitEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;

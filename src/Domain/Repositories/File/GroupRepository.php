@@ -2,9 +2,9 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Entity\Helpers\CollectionHelper;
-use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
+use ZnCore\Collection\Interfaces\Enumerable;
+use ZnCore\Entity\Helpers\CollectionHelper;
+use ZnCore\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Query\Entities\Query;
 use ZnCore\Domain\Repository\Interfaces\ReadRepositoryInterface;
 use ZnLib\Components\Store\StoreFile;

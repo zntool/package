@@ -4,9 +4,9 @@ namespace ZnTool\Package\Commands;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Domain\Entity\Helpers\CollectionHelper;
+use ZnCore\Collection\Interfaces\Enumerable;
+use ZnCore\Collection\Libs\Collection;
+use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 

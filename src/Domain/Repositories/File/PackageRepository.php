@@ -2,10 +2,10 @@
 
 namespace ZnTool\Package\Domain\Repositories\File;
 
-use ZnCore\Base\FileSystem\Helpers\FindFileHelper;
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
-use ZnCore\Domain\Collection\Libs\Collection;
-use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
+use ZnCore\FileSystem\Helpers\FindFileHelper;
+use ZnCore\Collection\Interfaces\Enumerable;
+use ZnCore\Collection\Libs\Collection;
+use ZnCore\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Domain\Query\Entities\Query;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;

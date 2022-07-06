@@ -2,9 +2,9 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
-use ZnCore\Base\FileSystem\Helpers\FileHelper;
-use ZnCore\Base\FileSystem\Helpers\FileStorageHelper;
-use ZnCore\Domain\Collection\Interfaces\Enumerable;
+use ZnCore\FileSystem\Helpers\FileHelper;
+use ZnCore\FileSystem\Helpers\FileStorageHelper;
+use ZnCore\Collection\Interfaces\Enumerable;
 use ZnTool\Package\Domain\Entities\ConfigEntity;
 
 class ComposerConfigHelper

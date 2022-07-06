@@ -5,9 +5,9 @@ namespace ZnTool\Package\Domain\Libs;
 //use Illuminate\Support\Arr;
 
 use ZnCore\Base\Arr\Helpers\ArrayHelper;
-use ZnCore\Base\FileSystem\Helpers\FileHelper;
-use ZnCore\Base\FileSystem\Helpers\FilePathHelper;
-use ZnCore\Base\Text\Helpers\TextHelper;
+use ZnCore\FileSystem\Helpers\FileHelper;
+use ZnCore\FileSystem\Helpers\FilePathHelper;
+use ZnCore\Text\Helpers\TextHelper;
 use ZnLib\Console\Domain\Base\BaseShell;
 use ZnLib\Console\Domain\Exceptions\ShellException;
 

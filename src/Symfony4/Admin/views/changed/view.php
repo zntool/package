@@ -6,11 +6,11 @@
  * @var $entity EntityIdInterface
  */
 
-use ZnCore\Base\Text\Helpers\TextHelper;
+use ZnCore\Text\Helpers\TextHelper;
 use ZnTool\Package\Domain\Entities\ApiKeyEntity;
 
 use ZnLib\Components\I18Next\Facades\I18Next;
-use ZnCore\Domain\Entity\Interfaces\EntityIdInterface;
+use ZnCore\Entity\Interfaces\EntityIdInterface;
 use ZnLib\Web\Controller\Helpers\ActionHelper;
 use ZnLib\Web\View\Libs\View;
 use ZnLib\Web\TwBootstrap\Widgets\Detail\DetailWidget;
