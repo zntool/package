@@ -5,6 +5,7 @@ namespace ZnTool\Package\Commands;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
 use ZnCore\FileSystem\Helpers\FindFileHelper;
@@ -40,38 +41,100 @@ class DepsCommand extends BaseCommand
             }
         }
 //        dd($selectedCollection);
-        
+
+        $classes = [];
+
         foreach ($selectedCollection as $packageEntity) {
             $dir = $packageEntity->getDirectory();
             $files = $this->getFiles($dir);
             foreach ($files as $file) {
                 $filePath = $file->getRealPath();
+//                $filePath = '/home/common/var/www/social/server.soc/vendor/znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
                 $code = file_get_contents($filePath);
-                $tokens = token_get_all($code, TOKEN_PARSE);
-                $this->extractUse($tokens);
+
+                preg_match_all('/(\\\Zn[a-z0-9_]+\\\[a-z0-9_\\\]+)/i', $code, $matches);
+                $matches = $matches[0];
+//                dd($matches);
+
+                /*$tokens = token_get_all($code, TOKEN_PARSE);
+                dd($tokens);*/
+
+                if ($matches) {
+                    $classes = ArrayHelper::merge($classes, $matches);
+                }
+
+                /*$classes111 = $this->extractClasses($tokens);
+                if ($classes111) {
+                    $classes = ArrayHelper::merge($classes, $classes111);
+                }
+
+
+                $classesUse = $this->extractUse($tokens);
+                if ($classesUse) {
+                    $classes = ArrayHelper::merge($classes, $classesUse);
+                }*/
             }
         }
-//        dd($collection);
+
+        $classes = array_unique($classes);
+        $classes = array_values($classes);
+        sort($classes);
+
+        dd($classes);
+
         return 0;
     }
-    
-    private function extractUse($tokens) {
-        $isStart = false;
+
+    private function extractClasses($tokens) {
+        $classes = [];
+        $startIndex = false;
         foreach ($tokens as $index => $token) {
-            if(isset($token[1]) && $token[1] == 'use') {
-                $isStart = $index;
+
+            if(isset($token[0]) && $token[0] == T_CLASS) {
+//                dd($token);
+                $startIndex = $index;
+                $useTokens = array_slice($tokens, $startIndex, 10);
+                dd($useTokens);
+            }
+
+
+
+            /*if(isset($token[1]) && $token[1] == 'use') {
+                $startIndex = $index;
                 //dd(array_slice($tokens, $index, 15));
 //                dd($token);
             }
-            if($isStart && $token == ';') {
+            if($startIndex && $token == ';') {
 //                dd($token);
-                $useTokens = array_slice($tokens, $isStart + 2, $index - $isStart - 2);
+                $useTokens = array_slice($tokens, $startIndex + 2, $index - $startIndex - 2);
                 $use = $this->joinTokens($useTokens);
-                dd($use);
-                $isStart = false;
-                
+                $classes[] = $use;
+//                dd($use);
+                $startIndex = false;
+            }*/
+        }
+        return $classes;
+    }
+
+    private function extractUse($tokens) {
+        $classes = [];
+        $startIndex = false;
+        foreach ($tokens as $index => $token) {
+            if(isset($token[1]) && $token[1] == 'use') {
+                $startIndex = $index;
+                //dd(array_slice($tokens, $index, 15));
+//                dd($token);
+            }
+            if($startIndex && $token == ';') {
+//                dd($token);
+                $useTokens = array_slice($tokens, $startIndex + 2, $index - $startIndex - 2);
+                $use = $this->joinTokens($useTokens);
+                $classes[] = $use;
+//                dd($use);
+                $startIndex = false;
             }
         }
+        return $classes;
     }
 
     private function joinTokens($useTokens) {
