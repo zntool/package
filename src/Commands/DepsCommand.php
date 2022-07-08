@@ -6,9 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Arr\Helpers\ArrayHelper;
+use ZnCore\Code\Entities\PhpTokenEntity;
+use ZnCore\Code\Helpers\PhpTokenHelper;
+use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
-use ZnCore\FileSystem\Helpers\FindFileHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 
@@ -23,7 +25,6 @@ class DepsCommand extends BaseCommand
 
         /** @var PackageEntity[] $collection */
         $collection = $this->packageService->findAll();
-//        dd($collection[0]->getId());
 
         $output->writeln('');
         $question = new ChoiceQuestion(
@@ -36,125 +37,161 @@ class DepsCommand extends BaseCommand
 
         $selectedCollection = new ArrayCollection();
         foreach ($collection as $packageEntity) {
-            if(in_array($packageEntity->getId(), $selectedPackages)) {
+            if (in_array($packageEntity->getId(), $selectedPackages)) {
                 $selectedCollection->add($packageEntity);
             }
         }
-//        dd($selectedCollection);
 
-        $classes = [];
 
+        $packageClasses = [];
+        
         foreach ($selectedCollection as $packageEntity) {
+            $classes = [];
             $dir = $packageEntity->getDirectory();
             $files = $this->getFiles($dir);
             foreach ($files as $file) {
                 $filePath = $file->getRealPath();
-//                $filePath = '/home/common/var/www/social/server.soc/vendor/znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
+//                $filePath = __DIR__ . '/../../../../znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
                 $code = file_get_contents($filePath);
-
-                preg_match_all('/(\\\Zn[a-z0-9_]+\\\[a-z0-9_\\\]+)/i', $code, $matches);
-                $matches = $matches[0];
-//                dd($matches);
-
-                /*$tokens = token_get_all($code, TOKEN_PARSE);
-                dd($tokens);*/
-
-                if ($matches) {
-                    $classes = ArrayHelper::merge($classes, $matches);
-                }
-
-                /*$classes111 = $this->extractClasses($tokens);
+                
+                $tokenCollection = PhpTokenHelper::getTokens($code);
+                $classes111 = $this->extractClasses($tokenCollection);
                 if ($classes111) {
                     $classes = ArrayHelper::merge($classes, $classes111);
                 }
 
-
-                $classesUse = $this->extractUse($tokens);
-                if ($classesUse) {
-                    $classes = ArrayHelper::merge($classes, $classesUse);
-                }*/
+                $tokenCollection = PhpTokenHelper::getTokens($code);
+                $classes111 = $this->extractUse($tokenCollection);
+                if ($classes111) {
+                    $classes = ArrayHelper::merge($classes, $classes111);
+                }
+            }
+            if($classes) {
+                $classes = $this->prepareClassList($classes);
+                $packageClasses[$packageEntity->getId()] = $classes;
             }
         }
 
-        $classes = array_unique($classes);
-        $classes = array_values($classes);
-        sort($classes);
-
-        dd($classes);
+        foreach ($packageClasses as $packageId => $classes) {
+            $output->writeln('');
+            $output->writeln("<fg=yellow>{$packageId}</>");
+            $output->writeln('');
+            foreach ($classes as $class) {
+                $output->writeln(" - <fg=blue>{$class}</>");
+            }
+            foreach ($this->noExistsClassList as $class) {
+                $output->writeln(" - <fg=red>{$class}</>");
+            }
+        }
 
         return 0;
     }
 
-    private function extractClasses($tokens) {
+    private $noExistsClassList = [];
+    
+    private function prepareClassList($classes)
+    {
+        foreach ($classes as &$class) {
+            $class = trim($class, ' \\');
+
+//            if (!class_exists('\\' . $class) /*|| !(new \ReflectionClass($class))->isUserDefined()*/) {
+//                $this->noExistsClassList[] = $class;
+//                unset($class);
+//                continue;
+//            }
+            
+            
+            $classArr = explode('\\', $class);
+            $classArr = array_splice($classArr, 0, 2);
+            $class = implode('\\', $classArr);
+
+
+
+            if (empty(trim($class))) {
+                unset($class);
+            }
+            // $class = implode('\\', $classArr);
+        }
+        $classes = array_unique($classes);
+        $classes = array_values($classes);
+        sort($classes);
+        return $classes;
+    }
+
+    private function extractClasses(Enumerable $tokenCollection)
+    {
         $classes = [];
-        $startIndex = false;
-        foreach ($tokens as $index => $token) {
-
-            if(isset($token[0]) && $token[0] == T_CLASS) {
-//                dd($token);
+        $startIndex = null;
+        foreach ($tokenCollection as $index => $tokenEntity) {
+            if (!$startIndex && $tokenEntity->getName() == 'T_NS_SEPARATOR') {
                 $startIndex = $index;
-                $useTokens = array_slice($tokens, $startIndex, 10);
-                dd($useTokens);
             }
+            if ($startIndex) {
+                if ($tokenEntity->getName() == 'T_NS_SEPARATOR' || $tokenEntity->getName() == 'T_STRING') {
 
-
-
-            /*if(isset($token[1]) && $token[1] == 'use') {
-                $startIndex = $index;
-                //dd(array_slice($tokens, $index, 15));
-//                dd($token);
+                } else {
+                    $className = '';
+                    for ($i = $startIndex - 1; $i < $index; $i++) {
+                        if ($tokenCollection[$i]->getName() != 'UNKNOWN') {
+                            $className .= $tokenCollection[$i]->getData();
+                        }
+                    }
+                    $classes[] = $className;
+                    $startIndex = null;
+                }
             }
-            if($startIndex && $token == ';') {
-//                dd($token);
-                $useTokens = array_slice($tokens, $startIndex + 2, $index - $startIndex - 2);
-                $use = $this->joinTokens($useTokens);
-                $classes[] = $use;
-//                dd($use);
-                $startIndex = false;
-            }*/
         }
         return $classes;
     }
 
-    private function extractUse($tokens) {
-        $classes = [];
-        $startIndex = false;
-        foreach ($tokens as $index => $token) {
-            if(isset($token[1]) && $token[1] == 'use') {
-                $startIndex = $index;
-                //dd(array_slice($tokens, $index, 15));
-//                dd($token);
+    private function isInClass(PhpTokenEntity $tokenEntity)
+    {
+        static $isClass = false;
+        if (!$isClass && $tokenEntity->getName() == 'T_CLASS') {
+            $isClass = 1;
+        }
+        if ($isClass && trim($tokenEntity->getData()) == '{') {
+            $isClass++;
+        }
+        if ($isClass && trim($tokenEntity->getData()) == '}') {
+            $isClass--;
+            if ($isClass === 1) {
+                $isClass = false;
             }
-            if($startIndex && $token == ';') {
-//                dd($token);
-                $useTokens = array_slice($tokens, $startIndex + 2, $index - $startIndex - 2);
-                $use = $this->joinTokens($useTokens);
-                $classes[] = $use;
-//                dd($use);
-                $startIndex = false;
+        }
+        return $isClass !== false;
+    }
+
+    private function extractUse(Enumerable $tokenCollection)
+    {
+        $classes = [];
+        $startIndex = null;
+        foreach ($tokenCollection as $index => $tokenEntity) {
+            $isClass = $this->isInClass($tokenEntity);
+            if (!$isClass) {
+                if (!$startIndex && $tokenEntity->getName() == 'T_USE') {
+                    $startIndex = $index;
+                }
+                if ($startIndex) {
+                    if ($tokenEntity->getName() == 'UNKNOWN' || $tokenEntity->getName() == 'T_AS') {
+                        $className = '';
+                        for ($i = $startIndex + 1; $i < $index; $i++) {
+                            $className .= $tokenCollection[$i]->getData();
+                        }
+                        $classes[] = $className;
+                        $startIndex = null;
+                    }
+                }
             }
         }
         return $classes;
-    }
-
-    private function joinTokens($useTokens) {
-        $res = '';
-        foreach ($useTokens as $token) {
-            if(is_string($token)) {
-                $res .= $token;
-            } elseif(is_array($token)) {
-                $res .= $token[1];
-            }
-        }
-        return $res;
     }
 
     /**
      * @param string $directoryPath
-     * @param array $exlcudes
      * @return array | \SplFileInfo[]
      */
-    private function getFiles(string $directoryPath, array $exlcudes = [])
+    private function getFiles(string $directoryPath)
     {
         $directoryIterator = new \RecursiveDirectoryIterator($directoryPath);
         $iterator = new \RecursiveIteratorIterator($directoryIterator);
@@ -166,15 +203,10 @@ class DepsCommand extends BaseCommand
             }
             $path = str_replace(DIRECTORY_SEPARATOR, '/', $info->getRealPath());
             $ext = FilePathHelper::fileExt($path);
-            if($ext != 'php') {
+            if ($ext != 'php') {
                 continue;
             }
-            //dd($ext);
             $path = str_replace($directoryPath, '', $path);
-            
-            /*if ($this->matchExclude($path, $exlcudes)) {
-                continue;
-            }*/
             $files[] = $info;
         }
         return $files;
