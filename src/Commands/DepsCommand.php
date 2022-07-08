@@ -13,6 +13,7 @@ use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
+use ZnTool\Package\Domain\Libs\Deps\DepsExtractor;
 
 class DepsCommand extends BaseCommand
 {
@@ -42,6 +43,12 @@ class DepsCommand extends BaseCommand
             }
         }
 
+        $depsExtractor = new DepsExtractor();
+
+        /*$filePath = __DIR__ . '/../../../../znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
+        $code = file_get_contents($filePath);
+        $classes111 = $depsExtractor->extractUses($code);
+        dd($classes111);*/
 
         $packageClasses = [];
         
@@ -51,21 +58,24 @@ class DepsCommand extends BaseCommand
             $files = $this->getFiles($dir);
             foreach ($files as $file) {
                 $filePath = $file->getRealPath();
-//                $filePath = __DIR__ . '/../../../../znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
+                $filePath = __DIR__ . '/../../../../znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
                 $code = file_get_contents($filePath);
-                
-                $tokenCollection = PhpTokenHelper::getTokens($code);
+
+                /*$tokenCollection = PhpTokenHelper::getTokens($code);
                 $classes111 = $this->extractClasses($tokenCollection);
                 if ($classes111) {
                     $classes = ArrayHelper::merge($classes, $classes111);
-                }
-
-                $tokenCollection = PhpTokenHelper::getTokens($code);
-                $classes111 = $this->extractUse($tokenCollection);
+                }*/
+                
+//                $tokenCollection = PhpTokenHelper::getTokens($code);
+//                $classes111 = $this->extractUse($tokenCollection);
+                $classes111 = $depsExtractor->extractUses($code);
+                dd($classes111);
                 if ($classes111) {
                     $classes = ArrayHelper::merge($classes, $classes111);
                 }
             }
+
             if($classes) {
                 $classes = $this->prepareClassList($classes);
                 $packageClasses[$packageEntity->getId()] = $classes;
@@ -79,7 +89,12 @@ class DepsCommand extends BaseCommand
             foreach ($classes as $class) {
                 $output->writeln(" - <fg=blue>{$class}</>");
             }
-            foreach ($this->noExistsClassList as $class) {
+            
+            $noExistsClassList = array_unique($this->noExistsClassList);
+            $noExistsClassList = array_values($noExistsClassList);
+            sort($noExistsClassList);
+            
+            foreach ($noExistsClassList as $class) {
                 $output->writeln(" - <fg=red>{$class}</>");
             }
         }
@@ -91,28 +106,37 @@ class DepsCommand extends BaseCommand
     
     private function prepareClassList($classes)
     {
-        foreach ($classes as &$class) {
+        $new = [];
+        foreach ($classes as $class) {
             $class = trim($class, ' \\');
 
-//            if (!class_exists('\\' . $class) /*|| !(new \ReflectionClass($class))->isUserDefined()*/) {
+            if (!class_exists($class) && !interface_exists($class) && !trait_exists($class)) {
 //                $this->noExistsClassList[] = $class;
 //                unset($class);
-//                continue;
-//            }
-            
-            
-            $classArr = explode('\\', $class);
+                continue;
+            } elseif(!(new \ReflectionClass($class))->isUserDefined()) {
+                $this->noExistsClassList[] = $class;
+//                unset($class);
+                continue;
+            }
+
+            /*$classArr = explode('\\', $class);
             $classArr = array_splice($classArr, 0, 2);
-            $class = implode('\\', $classArr);
+            $class = implode('\\', $classArr);*/
+
+            $class = trim($class, ' \\');
 
 
-
-            if (empty(trim($class))) {
-                unset($class);
+            if (empty($class)) {
+//                unset($class);
+                continue;
             }
             // $class = implode('\\', $classArr);
+
+            $new[] = $class;
         }
-        $classes = array_unique($classes);
+        
+        $classes = array_unique($new);
         $classes = array_values($classes);
         sort($classes);
         return $classes;
