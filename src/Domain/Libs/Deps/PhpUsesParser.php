@@ -7,12 +7,16 @@ use ZnCore\Code\Entities\PhpTokenEntity;
 use ZnCore\Code\Helpers\PhpTokenHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
 
-class DepsExtractor
+class PhpUsesParser
 {
 
-    public function extractUses(string $code) {
+    public function parse(string $code) {
         $tokenCollection = PhpTokenHelper::getTokens($code);
         return $this->extractUse($tokenCollection);
+    }
+
+    private function extractUseItem() {
+
     }
 
     private function extractUse(Enumerable $tokenCollection)

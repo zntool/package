@@ -14,6 +14,8 @@ use ZnCore\FileSystem\Helpers\FilePathHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Libs\Deps\DepsExtractor;
+use ZnTool\Package\Domain\Libs\Deps\PhpClassNameParser;
+use ZnTool\Package\Domain\Libs\Deps\PhpUsesParser;
 
 class DepsCommand extends BaseCommand
 {
@@ -43,12 +45,8 @@ class DepsCommand extends BaseCommand
             }
         }
 
-        $depsExtractor = new DepsExtractor();
-
-        /*$filePath = __DIR__ . '/../../../../znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
-        $code = file_get_contents($filePath);
-        $classes111 = $depsExtractor->extractUses($code);
-        dd($classes111);*/
+        $usesParser = new PhpUsesParser();
+        $classNameParser = new PhpClassNameParser();
 
         $packageClasses = [];
         
@@ -61,19 +59,15 @@ class DepsCommand extends BaseCommand
                 $filePath = __DIR__ . '/../../../../znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
                 $code = file_get_contents($filePath);
 
-                /*$tokenCollection = PhpTokenHelper::getTokens($code);
-                $classes111 = $this->extractClasses($tokenCollection);
-                if ($classes111) {
-                    $classes = ArrayHelper::merge($classes, $classes111);
-                }*/
-                
-//                $tokenCollection = PhpTokenHelper::getTokens($code);
-//                $classes111 = $this->extractUse($tokenCollection);
-                $classes111 = $depsExtractor->extractUses($code);
-                dd($classes111);
-                if ($classes111) {
-                    $classes = ArrayHelper::merge($classes, $classes111);
+                $classesFromClassNames = $classNameParser->parse($code);
+                if ($classesFromClassNames) {
+                    $classes = ArrayHelper::merge($classes, $classesFromClassNames);
                 }
+
+                /*$classesFromUses = $usesParser->parse($code);
+                if ($classesFromUses) {
+                    $classes = ArrayHelper::merge($classes, $classesFromUses);
+                }*/
             }
 
             if($classes) {
@@ -139,75 +133,6 @@ class DepsCommand extends BaseCommand
         $classes = array_unique($new);
         $classes = array_values($classes);
         sort($classes);
-        return $classes;
-    }
-
-    private function extractClasses(Enumerable $tokenCollection)
-    {
-        $classes = [];
-        $startIndex = null;
-        foreach ($tokenCollection as $index => $tokenEntity) {
-            if (!$startIndex && $tokenEntity->getName() == 'T_NS_SEPARATOR') {
-                $startIndex = $index;
-            }
-            if ($startIndex) {
-                if ($tokenEntity->getName() == 'T_NS_SEPARATOR' || $tokenEntity->getName() == 'T_STRING') {
-
-                } else {
-                    $className = '';
-                    for ($i = $startIndex - 1; $i < $index; $i++) {
-                        if ($tokenCollection[$i]->getName() != 'UNKNOWN') {
-                            $className .= $tokenCollection[$i]->getData();
-                        }
-                    }
-                    $classes[] = $className;
-                    $startIndex = null;
-                }
-            }
-        }
-        return $classes;
-    }
-
-    private function isInClass(PhpTokenEntity $tokenEntity)
-    {
-        static $isClass = false;
-        if (!$isClass && $tokenEntity->getName() == 'T_CLASS') {
-            $isClass = 1;
-        }
-        if ($isClass && trim($tokenEntity->getData()) == '{') {
-            $isClass++;
-        }
-        if ($isClass && trim($tokenEntity->getData()) == '}') {
-            $isClass--;
-            if ($isClass === 1) {
-                $isClass = false;
-            }
-        }
-        return $isClass !== false;
-    }
-
-    private function extractUse(Enumerable $tokenCollection)
-    {
-        $classes = [];
-        $startIndex = null;
-        foreach ($tokenCollection as $index => $tokenEntity) {
-            $isClass = $this->isInClass($tokenEntity);
-            if (!$isClass) {
-                if (!$startIndex && $tokenEntity->getName() == 'T_USE') {
-                    $startIndex = $index;
-                }
-                if ($startIndex) {
-                    if ($tokenEntity->getName() == 'UNKNOWN' || $tokenEntity->getName() == 'T_AS') {
-                        $className = '';
-                        for ($i = $startIndex + 1; $i < $index; $i++) {
-                            $className .= $tokenCollection[$i]->getData();
-                        }
-                        $classes[] = $className;
-                        $startIndex = null;
-                    }
-                }
-            }
-        }
         return $classes;
     }
 
