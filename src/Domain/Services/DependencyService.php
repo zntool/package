@@ -6,6 +6,7 @@ use Symfony\Component\Config\Resource\ComposerResource;
 use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Code\Helpers\ComposerHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
+use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
 use ZnCore\Instance\Helpers\ClassHelper;
 use ZnTool\Package\Domain\Entities\PackageEntity;
@@ -17,7 +18,8 @@ use ZnTool\Package\Domain\Libs\Deps\PhpUsesParser;
 class DependencyService
 {
 
-    public function findUsedClasses($selectedCollection) {
+    public function findUsedClasses($selectedCollection)
+    {
 
 //        $vendors = (new ComposerResource())->getVendors();
 //        dd($vendors);
@@ -47,7 +49,7 @@ class DependencyService
                 }
             }
 
-            if($classes) {
+            if ($classes) {
                 $classes = $this->prepareClassList($classes, $packageEntity);
                 $packageClasses[$packageEntity->getId()] = $classes;
             }
@@ -81,12 +83,15 @@ class DependencyService
     }
 
 
+    /**
+     * @return PackageEntity[]
+     */
     private function getPackageMap()
     {
         $packageCollection = PackageHelper::findAllPackages();
         foreach ($packageCollection as $packageEntity) {
             $autoload = $packageEntity->getConfig()->getAllAutoloadPsr4();
-            if($autoload) {
+            if ($autoload) {
                 foreach ($autoload as $namespace => $path) {
                     $namespace = trim($namespace, '\\');
                     $map[$namespace] = $packageEntity;
@@ -110,19 +115,38 @@ class DependencyService
         $packagesNeedle = [];
 
         $new = [];
+
+        $packageCollection = PackageHelper::findAllPackages();
+        $packageMap = CollectionHelper::indexing($packageCollection, 'id');
+//        $packageCollection = ArrayHelper::index($packageCollection->toArray(), 'id');
+//        dd($packageCollection);
         foreach ($classes as $class) {
             $class = trim($class, ' \\');
 
             foreach ($map as $namespace => $packageEntity1) {
-                if(strpos($class, $namespace) !== false) {
-                    if($packageEntity1->getId() != $packageEntity->getId()) {
-//                        dump($packageEntity1);
-                        $packagesNeedle[] = $packageEntity1->getId() . ':' . $packageEntity1->getConfig()->getVersion();
+                if (strpos($class, $namespace) !== false) {
+                    if ($packageEntity1->getId() != $packageEntity->getId()) {
+                        $requires = $packageEntity->getConfig()->getAllRequire();
+//                        dump($requires);
+
+                        $isNeed = empty($requires) || !isset($requires[$packageEntity1->getId()]);
+                        if($isNeed) {
+                            $status = 'need';
+                        } else {
+
+                        }
+
+                        $packagesNeedle[$packageEntity1->getId()] = [
+                            'id' => $packageEntity1->getId(),
+                            'version' => $packageEntity1->getConfig()->getVersion(),
+                            'fullName' => $packageEntity1->getId() /*. ':' . $packageEntity1->getConfig()->getVersion()*/,
+                            'isNeed' => $isNeed,
+                        ];
                     }
                 }
             }
 
-            if(strpos($class, '\\') === false) {
+            if (strpos($class, '\\') === false) {
                 continue;
             }
 
@@ -156,15 +180,16 @@ class DependencyService
         $classes = array_values($classes);
         sort($classes);
 
-        $packagesNeedle = array_unique($packagesNeedle);
-        $packagesNeedle = array_values($packagesNeedle);
-        sort($packagesNeedle);
+//        $packagesNeedle = array_unique($packagesNeedle);
+//        $packagesNeedle = array_values($packagesNeedle);
+        ksort($packagesNeedle);
 
         return $packagesNeedle;
     }
 
 
-    private function getPackageDirByClassName(string $class): string {
+    private function getPackageDirByClassName(string $class): string
+    {
         list($group, $package) = explode('\\', $class);
         $class = $group . '\\' . $package;
         $autoloadPsr4 = ComposerHelper::getComposerVendorClassLoader()->getPrefixesPsr4();

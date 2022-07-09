@@ -47,7 +47,12 @@ class DepsCommand extends BaseCommand
             $output->writeln("<fg=yellow>{$packageId}</>");
             $output->writeln('');
             foreach ($classes as $class) {
-                $output->writeln(" - <fg=blue>{$class}</>");
+//                dump($class);
+                if($class['isNeed']) {
+                    $output->writeln(" - <fg=red>{$class['fullName']}</>");
+                } else {
+                    $output->writeln(" - <fg=green>{$class['fullName']}</>");
+                }
             }
             
             /*$noExistsClassList = array_unique($this->noExistsClassList);
