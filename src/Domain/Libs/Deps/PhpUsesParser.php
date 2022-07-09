@@ -6,14 +6,47 @@ use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Code\Entities\PhpTokenEntity;
 use ZnCore\Code\Helpers\PhpTokenHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
+use ZnCore\Instance\Helpers\ClassHelper;
 
 class PhpUsesParser
 {
 
     public function parse(string $code) {
-        $tokenCollection = PhpTokenHelper::getTokens($code);
-        return $this->extractUse($tokenCollection);
+        return $this->parseUses($code);
+
+//        $tokenCollection = PhpTokenHelper::getTokens($code);
+//        return $this->extractUse($tokenCollection);
     }
+
+    private function parseUses(string $code): array
+    {
+        $exp = 'use\s+(.+);';
+
+        preg_match_all(
+            "/$exp/i",
+            $code,
+            $matches
+        );
+
+        $uses = [];
+
+        foreach ($matches[1] as $useItem) {
+            $withAs = preg_match('/(.+)\s+as\s+(.+)/i', $useItem, $withAsMatches);
+            if ($withAs) {
+                $alias = $withAsMatches[2];
+                $path = $withAsMatches[1];
+//                dd($withAsMatches);
+            } else {
+                $alias = ClassHelper::getClassOfClassName($useItem);
+                $path = $useItem;
+            }
+            $uses[$alias] = $path;
+        }
+        return $uses;
+    }
+
+
+
 
     private function extractUseItem() {
 

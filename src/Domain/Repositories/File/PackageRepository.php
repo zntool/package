@@ -7,6 +7,8 @@ use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Collection\Libs\Collection;
 use ZnCore\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Query\Entities\Query;
+use ZnLib\Components\Store\StoreFile;
+use ZnTool\Package\Domain\Entities\ConfigEntity;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Interfaces\Repositories\PackageRepositoryInterface;
@@ -77,15 +79,28 @@ class PackageRepository implements PackageRepositoryInterface
             $dir = $vendorDir . DIRECTORY_SEPARATOR . $groupEntity->name;
             $names = FindFileHelper::scanDir($dir);
             foreach ($names as $name) {
-                $packageEntity = new PackageEntity;
+                $packageEntity = new PackageEntity();
                 $packageEntity->setName($name);
                 $packageEntity->setGroup($groupEntity);
                 if ($this->isComposerPackage($packageEntity)) {
+                    $configEntity = $this->loadConfig($packageEntity);
+                    $packageEntity->setConfig($configEntity);
                     $collection->add($packageEntity);
                 }
             }
         }
         return $collection;
+    }
+
+    private function loadConfig(PackageEntity $packageEntity): ConfigEntity {
+        $composerConfigFile = $packageEntity->getDirectory() . '/composer.json';
+        $composerConfigStore = new StoreFile($composerConfigFile);
+        $composerConfig = $composerConfigStore->load();
+        $confiEntity = new ConfigEntity;
+        $confiEntity->setId($packageEntity->getId());
+        $confiEntity->setConfig($composerConfig);
+        $confiEntity->setPackage($packageEntity);
+        return $confiEntity;
     }
 
     private function isComposerPackage(PackageEntity $packageEntity): bool

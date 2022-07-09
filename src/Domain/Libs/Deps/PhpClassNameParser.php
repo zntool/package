@@ -11,11 +11,15 @@ class PhpClassNameParser
     public function parse(string $code)
     {
         $namespace = $this->parseNameSpace($code);
-        $uses = $this->parseUses($code);
+        $usesParser = new PhpUsesParser();
+        $uses = $usesParser->parse($code);
+
+
+//        $uses = $this->parseUses($code);
         $names = $this->parseNames($code);
         $classes = [];
         foreach ($names as $classItem) {
-            if ($this->isExist($classItem)) {
+            if (ClassHelper::isExist($classItem)) {
                 $classes[] = trim($classItem, '\\');
             } elseif (strpos($classItem, '\\') && $classItem[0] !== '\\') {
                 $arr = explode('\\', $classItem);
@@ -23,11 +27,11 @@ class PhpClassNameParser
                 if (isset($uses[$alias])) {
                     unset($arr[0]);
                     $className = $uses[$alias] . '\\' . implode('\\', $arr);
-                    if ($this->isExist($className)) {
+                    if (ClassHelper::isExist($className)) {
                         $classes[] = trim($className, '\\');
                     }
                 }
-            } elseif ($this->isExist($namespace . '\\' . $classItem) && $classItem[0] !== '\\') {
+            } elseif (ClassHelper::isExist($namespace . '\\' . $classItem) && $classItem[0] !== '\\') {
                 $classes[] = trim($namespace . '\\' . $classItem, '\\');
             }
         }
@@ -35,12 +39,6 @@ class PhpClassNameParser
 
 //        $tokenCollection = PhpTokenHelper::getTokens($code);
 //        return $this->extractClasses($tokenCollection);
-    }
-
-    private function isExist(string $classItem)
-    {
-        $classItem = trim($classItem, '\\');
-        return class_exists($classItem) || interface_exists($classItem) || trait_exists($classItem);
     }
 
     private function parseNameSpace(string $code): string

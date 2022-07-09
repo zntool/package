@@ -11,6 +11,7 @@ class PackageEntity implements EntityIdInterface
     private $name;
     private $group;
     private $directory;
+    private $config;
 
     public function getId()
     {
@@ -53,5 +54,15 @@ class PackageEntity implements EntityIdInterface
             $gitUrl = "git@github.com:{$this->getId()}.git";
         }
         return $gitUrl;
+    }
+
+    public function getConfig(): ConfigEntity
+    {
+        return $this->config;
+    }
+
+    public function setConfig(ConfigEntity $config): void
+    {
+        $this->config = $config;
     }
 }
