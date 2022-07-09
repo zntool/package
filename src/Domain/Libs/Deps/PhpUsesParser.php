@@ -38,6 +38,7 @@ class PhpUsesParser
                     } while($data != ';');
 
                     preg_match('/(.+)\s+as\s+(.+)/i', $className, $matches);
+                    $name = null;
                     if($matches) {
                         $name = $matches[2];
                         $className = $matches[1];

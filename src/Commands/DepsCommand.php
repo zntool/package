@@ -3,6 +3,7 @@
 namespace ZnTool\Package\Commands;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use PhpParser\ParserFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Arr\Helpers\ArrayHelper;
@@ -56,8 +57,12 @@ class DepsCommand extends BaseCommand
             $files = $this->getFiles($dir);
             foreach ($files as $file) {
                 $filePath = $file->getRealPath();
-                $filePath = __DIR__ . '/../../../../znlib/rpc/src/Domain/Repositories/ConfigManager/MethodRepository.php';
+                $filePath = __DIR__ . '/../../../../znbundle/reference/src/Domain/Entities/ItemEntity.php';
                 $code = file_get_contents($filePath);
+
+//                $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+//                $stmts = $parser->parse($code);
+//                dd(json_encode($stmts, JSON_PRETTY_PRINT));
 
                 $classesFromClassNames = $classNameParser->parse($code);
                 if ($classesFromClassNames) {
@@ -84,13 +89,13 @@ class DepsCommand extends BaseCommand
                 $output->writeln(" - <fg=blue>{$class}</>");
             }
             
-            $noExistsClassList = array_unique($this->noExistsClassList);
+            /*$noExistsClassList = array_unique($this->noExistsClassList);
             $noExistsClassList = array_values($noExistsClassList);
             sort($noExistsClassList);
             
             foreach ($noExistsClassList as $class) {
                 $output->writeln(" - <fg=red>{$class}</>");
-            }
+            }*/
         }
 
         return 0;
@@ -106,11 +111,9 @@ class DepsCommand extends BaseCommand
 
             if (!class_exists($class) && !interface_exists($class) && !trait_exists($class)) {
 //                $this->noExistsClassList[] = $class;
-//                unset($class);
                 continue;
             } elseif(!(new \ReflectionClass($class))->isUserDefined()) {
                 $this->noExistsClassList[] = $class;
-//                unset($class);
                 continue;
             }
 
