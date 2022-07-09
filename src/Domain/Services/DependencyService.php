@@ -2,18 +2,14 @@
 
 namespace ZnTool\Package\Domain\Services;
 
-use Symfony\Component\Config\Resource\ComposerResource;
 use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Code\Helpers\ComposerHelper;
-use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
-use ZnCore\Instance\Helpers\ClassHelper;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Helpers\PackageHelper;
-use ZnTool\Package\Domain\Libs\Deps\PhpClassNameParser;
 use ZnTool\Package\Domain\Libs\Deps\PhpClassNameInQuotedStringParser;
-use ZnTool\Package\Domain\Libs\Deps\PhpUsesParser;
+use ZnTool\Package\Domain\Libs\Deps\PhpClassNameParser;
 
 class DependencyService
 {
@@ -104,22 +100,12 @@ class DependencyService
     private function prepareClassList($classes, PackageEntity $packageEntity)
     {
         $map = $this->getPackageMap();
-
-//        dd($map);
-//        dd($packageCollection->first());
-
-
-//        $packages = ComposerHelper::getInstalledPackages();
-//        dd($map);
-
         $packagesNeedle = [];
 
         $new = [];
 
         $packageCollection = PackageHelper::findAllPackages();
         $packageMap = CollectionHelper::indexing($packageCollection, 'id');
-//        $packageCollection = ArrayHelper::index($packageCollection->toArray(), 'id');
-//        dd($packageCollection);
         foreach ($classes as $class) {
             $class = trim($class, ' \\');
 
@@ -130,7 +116,7 @@ class DependencyService
 //                        dump($requires);
 
                         $isNeed = empty($requires) || !isset($requires[$packageEntity1->getId()]);
-                        if($isNeed) {
+                        if ($isNeed) {
                             $status = 'need';
                         } else {
 
@@ -150,17 +136,6 @@ class DependencyService
                 continue;
             }
 
-//           $dir = $this->getPackageDirByClassName($class);
-//            dump($dir);
-
-            /*if (!class_exists($class) && !interface_exists($class) && !trait_exists($class)) {
-//                $this->noExistsClassList[] = $class;
-                continue;
-            } elseif(!(new \ReflectionClass($class))->isUserDefined()) {
-                $this->noExistsClassList[] = $class;
-                continue;
-            }*/
-
             $classArr = explode('\\', $class);
             $classArr = array_splice($classArr, 0, 2);
             $class = implode('\\', $classArr);
@@ -168,10 +143,8 @@ class DependencyService
             $class = trim($class, ' \\');
 
             if (empty($class)) {
-//                unset($class);
                 continue;
             }
-            // $class = implode('\\', $classArr);
 
             $new[] = $class;
         }
@@ -193,7 +166,6 @@ class DependencyService
         list($group, $package) = explode('\\', $class);
         $class = $group . '\\' . $package;
         $autoloadPsr4 = ComposerHelper::getComposerVendorClassLoader()->getPrefixesPsr4();
-//        dump(ComposerHelper::getPsr4Path($class));
         $dir = $autoloadPsr4[$class . '\\'][0];
         $dir = realpath($dir);
         return $dir;
