@@ -57,7 +57,7 @@ class DepsCommand extends BaseCommand
             $files = $this->getFiles($dir);
             foreach ($files as $file) {
                 $filePath = $file->getRealPath();
-                $filePath = __DIR__ . '/../../../../znbundle/reference/src/Domain/Entities/ItemEntity.php';
+//                $filePath = __DIR__ . '/../../../../znbundle/reference/src/Domain/Entities/ItemEntity.php';
                 $code = file_get_contents($filePath);
 
 //                $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);

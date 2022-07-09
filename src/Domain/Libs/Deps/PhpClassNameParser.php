@@ -29,7 +29,6 @@ class PhpClassNameParser
                 }
             } elseif ($this->isExist($namespace . '\\' . $classItem) && $classItem[0] !== '\\') {
                 $classes[] = trim($namespace . '\\' . $classItem, '\\');
-
             }
         }
         return $classes;
@@ -52,9 +51,11 @@ class PhpClassNameParser
             $code,
             $matches
         );
+        if(!isset($matches[1])) {
+            return '';
+        }
+
         return $matches[1];
-//        dd($matches);
-//         ZnLib\Wsdl\Domain\Entities;
     }
 
     private function parseNames(string $code): array
