@@ -57,13 +57,11 @@ class PackageRepository implements PackageRepositoryInterface
                 $packageEntity = new PackageEntity;
                 $packageEntity->setName($name);
                 $packageEntity->setGroup($groupEntity);
-
+                $this->assignConfig($packageEntity);
                 if ($this->isComposerPackage($packageEntity)) {
                     $collection->add($packageEntity);
                 }
-
             }
-
         }
 
         return $collection;
@@ -82,14 +80,20 @@ class PackageRepository implements PackageRepositoryInterface
                 $packageEntity = new PackageEntity();
                 $packageEntity->setName($name);
                 $packageEntity->setGroup($groupEntity);
+                $this->assignConfig($packageEntity);
                 if ($this->isComposerPackage($packageEntity)) {
-                    $configEntity = $this->loadConfig($packageEntity);
-                    $packageEntity->setConfig($configEntity);
                     $collection->add($packageEntity);
                 }
             }
         }
         return $collection;
+    }
+
+    private function assignConfig(PackageEntity $packageEntity) {
+        if ($this->isComposerPackage($packageEntity)) {
+            $configEntity = $this->loadConfig($packageEntity);
+            $packageEntity->setConfig($configEntity);
+        }
     }
 
     private function loadConfig(PackageEntity $packageEntity): ConfigEntity {

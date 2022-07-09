@@ -2,20 +2,26 @@
 
 namespace ZnTool\Package\Domain\Services;
 
+use Symfony\Component\Config\Resource\ComposerResource;
 use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Code\Helpers\ComposerHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
 use ZnCore\Instance\Helpers\ClassHelper;
+use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Libs\Deps\PhpClassNameParser;
-use ZnTool\Package\Domain\Libs\Deps\PhpClassNameStringParser;
+use ZnTool\Package\Domain\Libs\Deps\PhpClassNameInQuotedStringParser;
 use ZnTool\Package\Domain\Libs\Deps\PhpUsesParser;
 
 class DependencyService
 {
 
     public function findUsedClasses($selectedCollection) {
-        $classNameStringParser = new PhpClassNameStringParser();
+
+//        $vendors = (new ComposerResource())->getVendors();
+//        dd($vendors);
+
+        $classNameStringParser = new PhpClassNameInQuotedStringParser();
         $classNameParser = new PhpClassNameParser();
 
         $packageClasses = [];
@@ -26,7 +32,7 @@ class DependencyService
             $files = $this->getFiles($dir);
             foreach ($files as $file) {
                 $filePath = $file->getRealPath();
-                $filePath = __DIR__ . '/../../../../../znbundle/eav/src/Domain/config/container.php';
+//                $filePath = __DIR__ . '/../../../../../znbundle/eav/src/Domain/config/container.php';
                 $code = file_get_contents($filePath);
 
                 $classesFromString = $classNameStringParser->parse($code);
@@ -38,21 +44,15 @@ class DependencyService
                 if ($classesFromClassNames) {
                     $classes = ArrayHelper::merge($classes, $classesFromClassNames);
                 }
-
-                /*$classesFromUses = $usesParser->parse($code);
-                if ($classesFromUses) {
-                    $classes = ArrayHelper::merge($classes, $classesFromUses);
-                }*/
             }
 
             if($classes) {
-                $classes = $this->prepareClassList($classes);
+                $classes = $this->prepareClassList($classes, $packageEntity);
                 $packageClasses[$packageEntity->getId()] = $classes;
             }
         }
         return $packageClasses;
     }
-
 
     /**
      * @param string $directoryPath
@@ -79,11 +79,29 @@ class DependencyService
         return $files;
     }
 
-    private function prepareClassList($classes)
+    private function prepareClassList($classes, PackageEntity $packageEntity)
     {
+        $packages = ComposerHelper::getInstalledPackages();
+//        dd($map);
+
+        $packagesNeedle = [];
+
         $new = [];
         foreach ($classes as $class) {
             $class = trim($class, ' \\');
+
+            foreach ($packages as $namespace => $package) {
+//                dump($class, $namespace);
+                if(strpos($class, $namespace) !==false) {
+                    if($package['name'] != $packageEntity->getId()) {
+                        $packagesNeedle[] = $package['name'] . ':' . $package['version'];
+                    }
+
+                }
+            }
+
+
+
 
             if(strpos($class, '\\') === false) {
                 continue;
@@ -100,9 +118,9 @@ class DependencyService
                 continue;
             }*/
 
-            /*$classArr = explode('\\', $class);
+            $classArr = explode('\\', $class);
             $classArr = array_splice($classArr, 0, 2);
-            $class = implode('\\', $classArr);*/
+            $class = implode('\\', $classArr);
 
             $class = trim($class, ' \\');
 
@@ -119,7 +137,12 @@ class DependencyService
         $classes = array_unique($new);
         $classes = array_values($classes);
         sort($classes);
-        return $classes;
+
+        $packagesNeedle = array_unique($packagesNeedle);
+        $packagesNeedle = array_values($packagesNeedle);
+        sort($packagesNeedle);
+
+        return $packagesNeedle;
     }
 
 
