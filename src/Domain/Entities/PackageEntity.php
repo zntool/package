@@ -15,11 +15,15 @@ class PackageEntity implements EntityIdInterface
 
     public function getId()
     {
+        if($this->id) {
+            return $this->id;
+        }
         return $this->group->name . '/' . $this->name;
     }
 
     public function setId($id)
     {
+        $this->id = $id;
     }
 
     public function getName()

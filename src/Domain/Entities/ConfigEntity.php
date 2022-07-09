@@ -13,6 +13,8 @@ class ConfigEntity implements ValidationByMetadataInterface, EntityIdInterface
 
     private $id = null;
 
+    private $version = null;
+
     private $config = null;
 
     /** @var PackageEntity */
@@ -57,6 +59,16 @@ class ConfigEntity implements ValidationByMetadataInterface, EntityIdInterface
     public function setId($id)
     {
         //$this->id = $id;
+    }
+
+    public function setVersion($value) : void
+    {
+        $this->setConfigItem('version', $value);
+    }
+
+    public function getVersion()
+    {
+        return $this->getConfigItem('version');
     }
 
     public function getPackage(): PackageEntity

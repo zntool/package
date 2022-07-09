@@ -9,6 +9,7 @@ use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
 use ZnCore\Instance\Helpers\ClassHelper;
 use ZnTool\Package\Domain\Entities\PackageEntity;
+use ZnTool\Package\Domain\Helpers\PackageHelper;
 use ZnTool\Package\Domain\Libs\Deps\PhpClassNameParser;
 use ZnTool\Package\Domain\Libs\Deps\PhpClassNameInQuotedStringParser;
 use ZnTool\Package\Domain\Libs\Deps\PhpUsesParser;
@@ -79,9 +80,31 @@ class DependencyService
         return $files;
     }
 
+
+    private function getPackageMap()
+    {
+        $packageCollection = PackageHelper::findAllPackages();
+        foreach ($packageCollection as $packageEntity) {
+            $autoload = $packageEntity->getConfig()->getAllAutoloadPsr4();
+            if($autoload) {
+                foreach ($autoload as $namespace => $path) {
+                    $namespace = trim($namespace, '\\');
+                    $map[$namespace] = $packageEntity;
+                }
+            }
+        }
+        return $map;
+    }
+
     private function prepareClassList($classes, PackageEntity $packageEntity)
     {
-        $packages = ComposerHelper::getInstalledPackages();
+        $map = $this->getPackageMap();
+
+//        dd($map);
+//        dd($packageCollection->first());
+
+
+//        $packages = ComposerHelper::getInstalledPackages();
 //        dd($map);
 
         $packagesNeedle = [];
@@ -90,18 +113,14 @@ class DependencyService
         foreach ($classes as $class) {
             $class = trim($class, ' \\');
 
-            foreach ($packages as $namespace => $package) {
-//                dump($class, $namespace);
-                if(strpos($class, $namespace) !==false) {
-                    if($package['name'] != $packageEntity->getId()) {
-                        $packagesNeedle[] = $package['name'] . ':' . $package['version'];
+            foreach ($map as $namespace => $packageEntity1) {
+                if(strpos($class, $namespace) !== false) {
+                    if($packageEntity1->getId() != $packageEntity->getId()) {
+//                        dump($packageEntity1);
+                        $packagesNeedle[] = $packageEntity1->getId() . ':' . $packageEntity1->getConfig()->getVersion();
                     }
-
                 }
             }
-
-
-
 
             if(strpos($class, '\\') === false) {
                 continue;
@@ -123,7 +142,6 @@ class DependencyService
             $class = implode('\\', $classArr);
 
             $class = trim($class, ' \\');
-
 
             if (empty($class)) {
 //                unset($class);

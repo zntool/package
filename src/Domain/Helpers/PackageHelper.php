@@ -2,10 +2,45 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
+use ZnCore\Code\Helpers\ComposerHelper;
+use ZnCore\Collection\Interfaces\Enumerable;
+use ZnCore\Collection\Libs\Collection;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
+use ZnTool\Package\Domain\Entities\ConfigEntity;
+use ZnTool\Package\Domain\Entities\GroupEntity;
+use ZnTool\Package\Domain\Entities\PackageEntity;
 
 class PackageHelper
 {
+
+    /**
+     * @return Enumerable | PackageEntity[]
+     */
+    public static function findAllPackages(): Enumerable
+    {
+        $packages = ComposerHelper::getInstalled()['packages'];
+        $collection = new Collection();
+        foreach ($packages as $package) {
+            $packageEntity = new PackageEntity();
+            $packageEntity->setId($package['name']);
+            list($groupName, $packageName) = explode('/', $package['name']);
+            $packageEntity->setName($packageName);
+
+            $groupEntity = new GroupEntity();
+            $groupEntity->name = $groupName;
+
+            $packageEntity->setGroup($groupEntity);
+
+            $confiEntity = new ConfigEntity();
+            $confiEntity->setId($packageEntity->getId());
+            $confiEntity->setConfig($package);
+            $confiEntity->setPackage($packageEntity);
+
+            $packageEntity->setConfig($confiEntity);
+            $collection->add($packageEntity);
+        }
+        return $collection;
+    }
 
     public static function getPsr4Dictonary()
     {
@@ -44,5 +79,4 @@ class PackageHelper
         }
         return null;
     }
-
 }
