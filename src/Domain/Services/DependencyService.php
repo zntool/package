@@ -4,22 +4,57 @@ namespace ZnTool\Package\Domain\Services;
 
 use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Code\Helpers\ComposerHelper;
-use ZnCore\Entity\Helpers\CollectionHelper;
-use ZnCore\FileSystem\Helpers\FilePathHelper;
+use ZnCore\FileSystem\Helpers\FileHelper;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Helpers\PackageHelper;
 use ZnTool\Package\Domain\Libs\Deps\PhpClassNameInQuotedStringParser;
 use ZnTool\Package\Domain\Libs\Deps\PhpClassNameParser;
+use ZnTool\Package\Domain\Libs\Deps\PhpUsesParser;
 
 class DependencyService
 {
 
     public function findUsedClasses($selectedCollection)
     {
+        $classNameStringParser = new PhpClassNameInQuotedStringParser();
+        $classNameParser = new PhpClassNameParser();
+        $classUsesParser = new PhpUsesParser();
 
-//        $vendors = (new ComposerResource())->getVendors();
-//        dd($vendors);
+        $packageClasses = [];
+        $unused = [];
 
+        foreach ($selectedCollection as $packageEntity) {
+            $classes = [];
+            $dir = $packageEntity->getDirectory();
+
+            $options['only'][] = '*.php';
+            $files = FileHelper::findFiles($dir, $options);
+
+//            $files = $this->getFiles($dir);
+            foreach ($files as $filePath) {
+//                $filePath = $file->getRealPath();
+//                $filePath = __DIR__ . '/../../../../../znbundle/eav/src/Domain/config/container.php';
+                $code = file_get_contents($filePath);
+
+                $classesFromUses = $classUsesParser->parse($code);
+                $code = $classUsesParser->removeUses($code);
+//                dd($code);
+                if ($classesFromUses) {
+                    foreach ($classesFromUses as $alias => $use) {
+//                        dd($code, $alias);
+                        $has = strpos($code, $alias) !== false;
+                        if(!$has) {
+                            $unused[$packageEntity->getId()][$filePath][] = $use;
+                        }
+                    }
+                }
+            }
+        }
+        return $unused;
+    }
+
+    public function findDependency($selectedCollection)
+    {
         $classNameStringParser = new PhpClassNameInQuotedStringParser();
         $classNameParser = new PhpClassNameParser();
 
@@ -28,9 +63,13 @@ class DependencyService
         foreach ($selectedCollection as $packageEntity) {
             $classes = [];
             $dir = $packageEntity->getDirectory();
-            $files = $this->getFiles($dir);
-            foreach ($files as $file) {
-                $filePath = $file->getRealPath();
+
+            $options['only'][] = '*.php';
+            $files = FileHelper::findFiles($dir, $options);
+
+//            $files = $this->getFiles($dir);
+            foreach ($files as $filePath) {
+//                $filePath = $file->getRealPath();
 //                $filePath = __DIR__ . '/../../../../../znbundle/eav/src/Domain/config/container.php';
                 $code = file_get_contents($filePath);
 
@@ -54,37 +93,11 @@ class DependencyService
     }
 
     /**
-     * @param string $directoryPath
-     * @return array | \SplFileInfo[]
-     */
-    private function getFiles(string $directoryPath)
-    {
-        $directoryIterator = new \RecursiveDirectoryIterator($directoryPath);
-        $iterator = new \RecursiveIteratorIterator($directoryIterator);
-        $files = [];
-        foreach ($iterator as $info) {
-            /** @var $info \SplFileInfo */
-            if ($info->isDir()) {
-                continue;
-            }
-            $path = str_replace(DIRECTORY_SEPARATOR, '/', $info->getRealPath());
-            $ext = FilePathHelper::fileExt($path);
-            if ($ext != 'php') {
-                continue;
-            }
-            $path = str_replace($directoryPath, '', $path);
-            $files[] = $info;
-        }
-        return $files;
-    }
-
-
-    /**
      * @return PackageEntity[]
      */
     private function getPackageMap()
     {
-        $packageCollection = PackageHelper::findAllPackages();
+        $packageCollection = PackageHelper::findAll();
         foreach ($packageCollection as $packageEntity) {
             $autoload = $packageEntity->getConfig()->getAllAutoloadPsr4();
             if ($autoload) {
@@ -104,29 +117,36 @@ class DependencyService
 
         $new = [];
 
-        $packageCollection = PackageHelper::findAllPackages();
-        $packageMap = CollectionHelper::indexing($packageCollection, 'id');
+        $packageCollection = PackageHelper::findAll();
         foreach ($classes as $class) {
             $class = trim($class, ' \\');
 
             foreach ($map as $namespace => $packageEntity1) {
-                if (strpos($class, $namespace) !== false) {
-                    if ($packageEntity1->getId() != $packageEntity->getId()) {
-                        $requires = $packageEntity->getConfig()->getAllRequire();
-//                        dump($requires);
 
-                        $isNeed = empty($requires) || !isset($requires[$packageEntity1->getId()]);
+                $pid = $packageEntity1->getId();
+
+                if (strpos($class, $namespace) !== false) {
+                    if ($pid != $packageEntity->getId()) {
+                        $requires = $packageEntity->getConfig()->getAllRequire();
+
+                        $isNeed = empty($requires) || !isset($requires[$pid]);
                         if ($isNeed) {
                             $status = 'need';
                         } else {
 
                         }
 
-                        $packagesNeedle[$packageEntity1->getId()] = [
-                            'id' => $packageEntity1->getId(),
+                        $pckageItem = $packagesNeedle[$pid] ?? [];
+                        $pckageItemClasses = $pckageItem['classes'] ?? [];
+                        $pckageItemClasses[] = $class;
+
+
+                        $packagesNeedle[$pid] = [
+                            'id' => $pid,
                             'version' => $packageEntity1->getConfig()->getVersion(),
-                            'fullName' => $packageEntity1->getId() /*. ':' . $packageEntity1->getConfig()->getVersion()*/,
+                            'fullName' => $pid,
                             'isNeed' => $isNeed,
+                            'classes' => $pckageItemClasses,
                         ];
                     }
                 }

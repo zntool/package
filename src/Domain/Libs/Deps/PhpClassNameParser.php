@@ -17,11 +17,6 @@ class PhpClassNameParser
         $uses = $usesParser->parse($code);
         $names = $nameParser->parse($code);
 
-        /*dd(
-//            $namespace,
-//            $uses,
-            $names);*/
-
         $classes = [];
         foreach ($names as $classItem) {
             if (ClassHelper::isExist($classItem)) {

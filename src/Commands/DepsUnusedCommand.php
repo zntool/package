@@ -13,10 +13,10 @@ use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Libs\Deps\DepsExtractor;
 use ZnTool\Package\Domain\Services\DependencyService;
 
-class DepsCommand extends BaseCommand
+class DepsUnusedCommand extends BaseCommand
 {
 
-    protected static $defaultName = 'package:code:deps';
+    protected static $defaultName = 'package:code:unused';
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -28,7 +28,8 @@ class DepsCommand extends BaseCommand
         $selectedCollection = $this->selectPackages($collection, $input, $output);
 
         $dependencyService = new DependencyService();
-        $packageClasses = $dependencyService->findDependency($selectedCollection);
+        $packageClasses = $dependencyService->findUsedClasses($selectedCollection);
+        dd($packageClasses);
 
         foreach ($packageClasses as $packageId => $classes) {
             $output->writeln('');

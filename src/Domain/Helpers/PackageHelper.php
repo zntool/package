@@ -2,10 +2,10 @@
 
 namespace ZnTool\Package\Domain\Helpers;
 
-use ZnCore\Code\Helpers\ComposerHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Collection\Libs\Collection;
 use ZnCore\FileSystem\Helpers\FilePathHelper;
+use ZnLib\Components\Store\StoreFile;
 use ZnTool\Package\Domain\Entities\ConfigEntity;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
@@ -16,9 +16,9 @@ class PackageHelper
     /**
      * @return Enumerable | PackageEntity[]
      */
-    public static function findAllPackages(): Enumerable
+    public static function findAll(): Enumerable
     {
-        $packages = ComposerHelper::getInstalled()['packages'];
+        $packages = self::getInstalled()['packages'];
         $collection = new Collection();
         foreach ($packages as $package) {
             $packageEntity = new PackageEntity();
@@ -40,6 +40,18 @@ class PackageHelper
             $collection->add($packageEntity);
         }
         return $collection;
+    }
+
+    public static function getInstalled(): array
+    {
+        $store = new StoreFile(__DIR__ . '/../../../../../composer/installed.json');
+        return $installed = $store->load();
+    }
+
+    public static function getLock(): array
+    {
+        $store = new StoreFile(__DIR__ . '/../../../../../../composer.lock', 'json');
+        return $installed = $store->load();
     }
 
     public static function getPsr4Dictonary()
@@ -66,7 +78,6 @@ class PackageHelper
     {
         $namespace = trim($namespace, '\\');
         $namespace .= '\\';
-        //dd($namespace);
         $psr4 = self::getPsr4Dictonary();
         foreach ($psr4 as $ns => $path) {
             $path = $path[0];
