@@ -91,4 +91,9 @@ return [
         'provider_name' => 'github',
         'authors' => [],
     ],
+    [
+        'name' => 'znpack',
+        'provider_name' => 'github',
+        'authors' => [],
+    ],
 ];
