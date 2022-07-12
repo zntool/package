@@ -8,7 +8,7 @@ return [
         \ZnTool\Package\Domain\Interfaces\Services\GitServiceInterface::class => \ZnTool\Package\Domain\Services\GitService::class,
         \ZnTool\Package\Domain\Interfaces\Services\PackageServiceInterface::class => \ZnTool\Package\Domain\Services\PackageService::class,
         \ZnTool\Package\Domain\Repositories\File\GroupRepository::class => function () {
-            $fileName = ! empty($_ENV['PACKAGE_GROUP_CONFIG']) ? __DIR__ . '/../../../../../../' . $_ENV['PACKAGE_GROUP_CONFIG'] : __DIR__ . '/../../../src/Domain/Data/package_group.php';
+            $fileName = ! empty($_ENV['PACKAGE_GROUP_CONFIG']) ? $_ENV['PACKAGE_GROUP_CONFIG'] : __DIR__ . '/../../../src/Domain/Data/package_group.php';
             $repo = new \ZnTool\Package\Domain\Repositories\File\GroupRepository($fileName);
             return $repo;
         },
