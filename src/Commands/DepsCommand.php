@@ -4,6 +4,7 @@ namespace ZnTool\Package\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Collection\Libs\Collection;
@@ -18,6 +19,25 @@ class DepsCommand extends BaseCommand
 
     protected static $defaultName = 'package:code:deps';
 
+    protected function configure()
+    {
+//        $this->addArgument('channel', InputArgument::OPTIONAL);
+        $this->addOption(
+            'withDetail',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            '',
+            false
+        );
+        $this->addOption(
+            'withResolved',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            '',
+            false
+        );
+    }
+    
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('<fg=white># Packages deps</>');
@@ -30,20 +50,29 @@ class DepsCommand extends BaseCommand
         $dependencyService = new DependencyService();
         $packageClasses = $dependencyService->findDependency($selectedCollection);
 
+        $withDetail = $input->getOption('withDetail');
+        $withResolved = $input->getOption('withResolved');
+
         foreach ($packageClasses as $packageId => $classes) {
             $output->writeln('');
-            $output->writeln("<fg=yellow>{$packageId}</>");
-            $output->writeln('');
+            $output->writeln("<fg=blue># {$packageId}</>");
+//            $output->writeln('');
             foreach ($classes as $class) {
+                if(!$withResolved && !$class['isNeed']) {
+                    continue;
+                }
                 if ($class['isNeed']) {
                     $output->writeln(" - <fg=red>{$class['fullName']}</>");
-                    foreach ($class['classes'] as $packageClass) {
-                        $output->writeln("    - <fg=white>{$packageClass}</>");
-                    }
-                    $output->writeln("");
                 } else {
                     $output->writeln(" - <fg=green>{$class['fullName']}</>");
                 }
+                if($withDetail) {
+                    foreach ($class['classes'] as $packageClass) {
+                        $output->writeln("    - <fg=white>{$packageClass}</>");
+                    }
+                }
+
+//                $output->writeln("");
             }
         }
 

@@ -140,7 +140,6 @@ class DependencyService
                         $pckageItemClasses = $pckageItem['classes'] ?? [];
                         $pckageItemClasses[] = $class;
 
-
                         $packagesNeedle[$pid] = [
                             'id' => $pid,
                             'version' => $packageEntity1->getConfig()->getVersion(),
@@ -169,9 +168,17 @@ class DependencyService
             $new[] = $class;
         }
 
-        $classes = array_unique($new);
-        $classes = array_values($classes);
-        sort($classes);
+        foreach ($packagesNeedle as $pid => $pckageItem) {
+            $classes = array_unique($pckageItem['classes']);
+            $classes = array_values($classes);
+            sort($classes);
+            $pckageItem['classes'] = $classes;
+            $packagesNeedle[$pid] = $pckageItem;
+        }
+
+//        $classes = array_unique($new);
+//        $classes = array_values($classes);
+//        sort($classes);
 
 //        $packagesNeedle = array_unique($packagesNeedle);
 //        $packagesNeedle = array_values($packagesNeedle);
