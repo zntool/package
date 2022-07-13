@@ -96,4 +96,9 @@ return [
         'provider_name' => 'github',
         'authors' => [],
     ],
+    [
+        'name' => 'zndomain',
+        'provider_name' => 'github',
+        'authors' => [],
+    ],
 ];
