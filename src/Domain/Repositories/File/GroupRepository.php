@@ -6,7 +6,7 @@ use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Entity\Helpers\CollectionHelper;
 use ZnCore\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Query\Entities\Query;
-use ZnCore\Repository\Interfaces\ReadRepositoryInterface;
+use ZnDomain\Repository\Interfaces\ReadRepositoryInterface;
 use ZnLib\Components\Store\StoreFile;
 use ZnTool\Package\Domain\Entities\GroupEntity;
 

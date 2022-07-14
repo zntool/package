@@ -5,7 +5,7 @@ namespace ZnTool\Package\Domain\Services;
 //use Illuminate\Support\Arr;
 use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Collection\Interfaces\Enumerable;
-use ZnCore\Service\Base\BaseService;
+use ZnDomain\Service\Base\BaseService;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 use ZnTool\Package\Domain\Entities\TagEntity;
