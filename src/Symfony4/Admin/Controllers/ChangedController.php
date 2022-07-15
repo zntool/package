@@ -5,7 +5,7 @@ namespace ZnTool\Package\Symfony4\Admin\Controllers;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use ZnDomain\Entity\Helpers\CollectionHelper;
+use ZnCore\Collection\Helpers\CollectionHelper;
 use ZnDomain\Entity\Helpers\EntityHelper;
 use ZnLib\Web\Controller\Base\BaseWebController;
 use ZnLib\Web\Controller\Interfaces\ControllerAccessInterface;

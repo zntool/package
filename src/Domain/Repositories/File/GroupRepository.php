@@ -3,7 +3,7 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use ZnCore\Collection\Interfaces\Enumerable;
-use ZnDomain\Entity\Helpers\CollectionHelper;
+use ZnCore\Collection\Helpers\CollectionHelper;
 use ZnDomain\Entity\Interfaces\EntityIdInterface;
 use ZnDomain\Query\Entities\Query;
 use ZnDomain\Repository\Interfaces\ReadRepositoryInterface;

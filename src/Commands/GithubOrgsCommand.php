@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Arr\Helpers\ArrayHelper;
 use ZnCore\Collection\Libs\Collection;
-use ZnDomain\Entity\Helpers\CollectionHelper;
+use ZnCore\Collection\Helpers\CollectionHelper;
 use ZnLib\Components\Http\Enums\HttpMethodEnum;
 use ZnLib\Components\Store\Helpers\StoreHelper;
 use ZnTool\Package\Domain\Entities\GroupEntity;
