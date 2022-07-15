@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Collection\Libs\Collection;
-use ZnCore\Entity\Helpers\CollectionHelper;
+use ZnDomain\Entity\Helpers\CollectionHelper;
 use ZnLib\Console\Symfony4\Question\ChoiceQuestion;
 use ZnTool\Package\Domain\Entities\PackageEntity;
 

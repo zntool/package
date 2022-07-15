@@ -3,9 +3,9 @@
 namespace ZnTool\Package\Domain\Repositories\File;
 
 use ZnCore\Collection\Interfaces\Enumerable;
-use ZnCore\Entity\Helpers\CollectionHelper;
-use ZnCore\Entity\Interfaces\EntityIdInterface;
-use ZnCore\Query\Entities\Query;
+use ZnDomain\Entity\Helpers\CollectionHelper;
+use ZnDomain\Entity\Interfaces\EntityIdInterface;
+use ZnDomain\Query\Entities\Query;
 use ZnDomain\Repository\Interfaces\ReadRepositoryInterface;
 use ZnLib\Components\Store\StoreFile;
 use ZnTool\Package\Domain\Entities\GroupEntity;

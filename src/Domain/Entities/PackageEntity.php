@@ -2,7 +2,7 @@
 
 namespace ZnTool\Package\Domain\Entities;
 
-use ZnCore\Entity\Interfaces\EntityIdInterface;
+use ZnDomain\Entity\Interfaces\EntityIdInterface;
 
 class PackageEntity implements EntityIdInterface
 {

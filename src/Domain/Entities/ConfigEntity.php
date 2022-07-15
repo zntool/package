@@ -3,10 +3,10 @@
 namespace ZnTool\Package\Domain\Entities;
 
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use ZnCore\Entity\Interfaces\EntityIdInterface;
+use ZnDomain\Entity\Interfaces\EntityIdInterface;
 use ZnCore\Arr\Helpers\ArrayHelper;
 use Symfony\Component\Validator\Constraints as Assert;
-use ZnCore\Validation\Interfaces\ValidationByMetadataInterface;
+use ZnDomain\Validator\Interfaces\ValidationByMetadataInterface;
 
 class ConfigEntity implements ValidationByMetadataInterface, EntityIdInterface
 {

@@ -4,7 +4,7 @@ namespace ZnTool\Package\Domain\Repositories\File;
 
 use ZnCore\Collection\Interfaces\Enumerable;
 use ZnCore\Collection\Libs\Collection;
-use ZnCore\Entity\Helpers\CollectionHelper;
+use ZnDomain\Entity\Helpers\CollectionHelper;
 use ZnTool\Package\Domain\Entities\CommitEntity;
 use ZnTool\Package\Domain\Entities\GitEntity;
 use ZnTool\Package\Domain\Entities\PackageEntity;
