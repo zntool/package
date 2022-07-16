@@ -7,8 +7,8 @@ use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZnCore\Arr\Helpers\ArrayHelper;
-use ZnCore\Collection\Libs\Collection;
 use ZnCore\Collection\Helpers\CollectionHelper;
+use ZnCore\Collection\Libs\Collection;
 use ZnLib\Components\Http\Enums\HttpMethodEnum;
 use ZnLib\Components\Store\Helpers\StoreHelper;
 use ZnTool\Package\Domain\Entities\GroupEntity;
@@ -50,10 +50,9 @@ class GithubOrgsCommand extends BaseCommand
         }
         $fileName = 'vendor/zntool/dev/src/Package/Domain/Data/package_origin.php';
         $array = CollectionHelper::toArray($repoCollection);
-        $array = ArrayHelper::collectionExtractByKeys($array, ['id', 'name', 'group']);
+        $array = ArrayHelper::extractItemsWithAttributes($array, ['id', 'name', 'group']);
 
         StoreHelper::save($fileName, $array);
-//        LoadHelper::saveConfig($fileName, $array);
 
         $output->writeln('');
         return 0;
@@ -68,6 +67,5 @@ class GithubOrgsCommand extends BaseCommand
             $response = $e->getResponse();
         }
         return json_decode($response->getBody()->getContents());
-//        return $response;
     }
 }
